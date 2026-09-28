@@ -1,6 +1,6 @@
 # JSP-001022: logarithmic density and divisibility chains
 
-Lean formalization of the positive lower logarithmic density formulation of
+Formalization in Lean 4 of the positive lower logarithmic density formulation of
 [JSP-001022](https://github.com/TheJustinSunPrize/awards/blob/8332eaab70094567cb3a2137e33b6ea5a2e316d8/problems/catalog-1001-1022.md#JSP-001022),
 also indexed as [Erdős Problem #1217](https://www.erdosproblems.com/1217).
 The contribution consists of a density bridge and statement conversions over
@@ -10,19 +10,23 @@ the existing, commit-pinned Prim chain theorem.
 
 Let `a₁ < a₂ < ...` be positive integers with
 
-$$
-\liminf_{x\to\infty}\frac{1}{\log x}\sum_{a_i<x}\frac{1}{a_i}>0.
-$$
+```math
+\liminf_{x \to \infty}
+\frac{1}{\log x}
+\sum_{a_i < x} \frac{1}{a_i} > 0.
+```
 
-There are strictly increasing positive indices `k₁ < k₂ < ...` such that
-`a(kᵢ)` divides `a(kᵢ₊₁)` and
+There is a strictly increasing sequence of positive integer indices
+`k₁ < k₂ < ...` such that `a(kᵢ)` divides `a(kᵢ₊₁)` and
 
-$$
-\limsup_{x\to\infty}\frac{\#\{i:a_{k_i}<x\}}{\log\log x}
-\;\geq\;
-\limsup_{x\to\infty}\frac{1}{\log\log x}
-   \sum_{2\leq a_i<x}\frac{1}{a_i\log a_i}.
-$$
+```math
+\limsup_{x \to \infty}
+\frac{\#\{i \in \mathbb{Z}_{>0} : a_{k_i} < x\}}{\log\log x}
+\geq
+\limsup_{x \to \infty}
+\frac{1}{\log\log x}
+\sum_{2 \leq a_i < x} \frac{1}{a_i\log a_i}.
+```
 
 The counting limsup is in `[0,+∞]`. The doubly harmonic weight is defined for
 integers at least 2 and extended by zero at 1. The reciprocal density includes 1
