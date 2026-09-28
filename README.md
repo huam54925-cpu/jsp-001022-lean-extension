@@ -1,45 +1,118 @@
-# JSP-001022 extension of pinned Prim
+# JSP-001022: logarithmic density and divisibility chains
 
-Local staging project, 2026-09-28. No public repository or contribution commit has been created here.
+Lean formalization of the positive lower logarithmic density formulation of
+[JSP-001022](https://github.com/TheJustinSunPrize/awards/blob/8332eaab70094567cb3a2137e33b6ea5a2e316d8/problems/catalog-1001-1022.md#JSP-001022),
+also indexed as [Erdős Problem #1217](https://www.erdosproblems.com/1217).
+The contribution consists of a density bridge and statement conversions over
+the existing, commit-pinned Prim chain theorem.
 
-## Contribution boundary
+## Mathematical statement
 
-`LeanCompletion/JSP001022.lean` contains only the 15 supplemental declarations extracted from the B8 file with SHA256 `5cb6b69c8f6128111a79a6063cbaeb903e188166b9c23be43dbfb3b98eac7935`. The extraction begins at `LeanCompletion.jsp_001022_eventual_lower_bound` and ends after `LeanCompletion.jsp_001022_original_enumeration_chain`.
+Let `a₁ < a₂ < ...` be positive integers with
 
-The file imports `LeanMarathon.Main` from [Prim](https://github.com/YuanheZ/Prim) at commit `a303f6bd23bb8f29a833d1d70327528359180995`. The 14592-line upstream proof prefix is not included in this contribution's source files. The upstream chain construction remains credited to Prim/LeanMarathon and its earlier sources. The additions are the density bridge and support lemmas, explicit wrapper, cutoff/density/enumeration conversions, and final composition; they are not a new proof of the upstream chain construction.
+$$
+\liminf_{x\to\infty}\frac{1}{\log x}\sum_{a_i<x}\frac{1}{a_i}>0.
+$$
 
-No upstream authorization has been obtained. This layout avoids redistributing the upstream prefix in our contribution; it is not a grant of rights or a legal determination about dependency use. No blanket license is attached. Author attribution and applicable permissions must be settled before public submission.
+There are strictly increasing positive indices `k₁ < k₂ < ...` such that
+`a(kᵢ)` divides `a(kᵢ₊₁)` and
 
-## Entry points
+$$
+\limsup_{x\to\infty}\frac{\#\{i:a_{k_i}<x\}}{\log\log x}
+\;\geq\;
+\limsup_{x\to\infty}\frac{1}{\log\log x}
+   \sum_{2\leq a_i<x}\frac{1}{a_i\log a_i}.
+$$
 
-- `LeanCompletion/JSP001022.lean`: the supplemental proofs.
-- `LeanCompletion/Audit.lean`: frozen-type check, theorem check, transitive axiom output, proof-body dependency query and module-resolution probe.
-- `verification/Negative.lean`: deliberately false equality, expected to fail at `rfl`; never include it in a default build target.
-- `preparation.json`: extraction hashes and upstream-prefix comparison.
-- `verification/targets.json`: exact frozen theorem type and required dependencies.
+The counting limsup is in `[0,+∞]`. The doubly harmonic weight is defined for
+integers at least 2 and extended by zero at 1. The reciprocal density includes 1
+normally. The precise conventions and quantifier order are explained in
+[Statement correspondence](docs/STATEMENT_CORRESPONDENCE.md).
 
-Target theorem: `LeanCompletion.jsp_001022_original_enumeration_chain`.
-The toolchain remains `leanprover/lean4:v4.30.0-rc2`.
-The root manifest is derived from the pinned Prim manifest, with Prim itself added as a direct dependency. It now contains 12 dependencies, including Prim and repl. Its resolution and compilation require a new check; B8's original 10-package environment is not assumed identical.
+Target:
+[`LeanCompletion.jsp_001022_original_enumeration_chain`](LeanCompletion/JSP001022.lean#L1136).
+Its [exact type](docs/STATEMENT.md) is separately stated and checked by
+[the audit module](LeanCompletion/Audit.lean). It has no extra unproved hypotheses
+beyond the displayed assumptions.
 
-## Verification scope
+## Mathematical and formalization sources
 
-B8 PASS is historical evidence for the old combined file only. It does not certify this imported-module layout. Local check results are recorded separately under `verification/runs/`; no success should be claimed without a completed `verification.json` there.
+The mathematical solution is Alexeev, Barreto, Li, Lichtman, Price, Shah, Tang
+and Tao, *Primitive sets and von Mangoldt chains: Erdős Problem #1196 and beyond*,
+[arXiv:2605.00301v1](https://arxiv.org/abs/2605.00301v1), Theorem 1.6 and Section 9.
+The historical counting conjecture is [Erdős–Sárközy–Szemerédi (1966), p. 432,
+equation (5)](https://www.renyi.hu/~p_erdos/1966-09.pdf#page=2).
+The historical p. 431 has a prose/formula discrepancy about lower versus upper
+density, explicitly recorded in the [correspondence document](docs/STATEMENT_CORRESPONDENCE.md#historical-source-discrepancy).
+The target follows the current catalog's lower-density formulation.
 
-The local checker may copy matching third-party build caches from the B8 dependency directory after checking Git revisions and tracked cleanliness. It never copies the old `Aaa` proof artifact or an existing Prim Main build. Any such cache reuse is reported. This is not another clean-from-zero build and not external-machine reproduction.
+The proof imports [`LeanMarathon.Main`](https://github.com/YuanheZ/Prim/blob/a303f6bd23bb8f29a833d1d70327528359180995/LeanMarathon/Main.lean)
+from Prim at `a303f6bd23bb8f29a833d1d70327528359180995`.
+Prim's 14,592-line base formalization remains credited to Prim/LeanMarathon and
+its earlier sources. It is fetched as a dependency, not vendored here.
 
-Commands after dependencies are prepared:
+The 1,200-line extension contains 15 declarations: finite Abel and weighted
+estimates, the lower-logarithmic to upper-doubly-logarithmic density implication,
+an explicit upstream application, cutoff and density-type conversions, positive
+enumeration and subsequence conversions, and final composition.
+[Attribution](docs/ATTRIBUTION.md) identifies each declaration and separates
+supplemental proofs from wrappers and engineering work. AI assistance was used.
+No mathematical-discovery or first-formalization claim is made;
+[related submissions](docs/RELATED_WORK.md) are identified.
 
-```powershell
-lake --no-cache --rehash --no-ansi build "+LeanCompletion.JSP001022:olean"
-lake --no-cache --no-build env lean LeanCompletion/Audit.lean
-lake --no-cache --no-build env lean verification/Negative.lean
+## Reproduce
+
+Requires Git and the Lean toolchain specified by `lean-toolchain` (normally
+installed through elan). Substitute the full 40-character commit from the
+submission or verification report and keep `lake-manifest.json` unchanged.
+
+```text
+git clone https://github.com/huam54925-cpu/jsp-001022-lean-extension.git
+cd jsp-001022-lean-extension
+git checkout --detach <FULL_COMMIT_SHA_FROM_SUBMISSION>
+lake build
+lake env lean LeanCompletion/JSP001022.lean
+lake env lean LeanCompletion/Audit.lean
 ```
 
-The first two must exit 0; the last must reject `rfl` for `0 = 1`, not fail at an import. Capture native output as raw UTF-8 bytes. Also verify source hashes, dependency revisions, loaded module paths and the exact frozen statement. Do not run `lake update` or change pins during verification.
+Lean is `leanprover/lean4:v4.30.0-rc2`; mathlib is pinned to
+`5450b53e5ddc75d46418fabb605edbf36bd0beb6`. All 12 dependency revisions are in
+`lake-manifest.json`. Do not run `lake update` or upgrade the toolchain.
+See [Reproduction and verification](docs/VERIFICATION.md) for first-build setup,
+the negative control, actual evidence scope and cache reuse.
 
-Once the final contribution commit exists, verify that exact commit and bind its SHA to its own results. A successful check of this uncommitted local tree is not a check of a future commit. Original-problem semantic acceptance remains separate.
+The recorded local extension audit found exactly these transitive axioms:
 
-## Publication exclusions
+```text
+propext
+Classical.choice
+Quot.sound
+```
 
-Do not publish `.lake`, dependency source checkouts, compiled artifacts, the historical combined `Reproduction.lean`/`FullProof.lean`, or an archive of the working directory. `.gitignore` is a guard, not a substitute for inspecting tracked files and the outgoing diff. Keep upstream URLs, commit pins and contribution attribution. Decide the public repository and permitted evidence files only after the local result and permissions are reviewed.
+It also verified the exact target type, actual proof-body dependencies,
+dependency pins and module paths. It was a same-host check with declared
+third-party cache reuse. Commit-specific results and their limitations are
+listed in [the verification document](docs/VERIFICATION.md).
+
+## Repository contents
+
+| Path | Purpose |
+| --- | --- |
+| `LeanCompletion/JSP001022.lean` | Supplemental proof declarations |
+| `LeanCompletion/Audit.lean` | Exact statement, dependency, axiom and module-path checks |
+| `verification/Negative.lean` | Invalid `0 = 1` proof; must fail at `rfl` |
+| `verification/targets.json` | Frozen target type and required dependency names |
+| `preparation.json` | Historical extraction record, not current verification status |
+| `docs/STATEMENT_CORRESPONDENCE.md` | Source and Lean correspondence |
+| `docs/ATTRIBUTION.md` | Contribution boundary and license status |
+| `docs/VERIFICATION.md` | Reproduction instructions and evidence limitations |
+| `docs/RELATED_WORK.md` | Existing formalizations and catalog PRs |
+
+## Licensing
+
+No blanket license is asserted over third-party code. A license file was not
+identified in the pinned Prim tree. Prim is referenced at its original public
+repository; its source and build products are excluded here. Each dependency
+retains its own authorship and applicable terms. This repository does not attach
+an additional license to the supplemental work. See
+[Attribution](docs/ATTRIBUTION.md#licensing-and-third-party-material).
