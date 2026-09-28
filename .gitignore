@@ -1,0 +1,10 @@
+/.lake/
+/verification/runs/
+*.olean
+*.olean.*
+*.ilean
+*.o
+*.obj
+*.dll
+*.zip
+__pycache__/

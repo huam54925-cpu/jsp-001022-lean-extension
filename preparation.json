@@ -1,0 +1,50 @@
+{
+  "status": "PREPARED_NOT_YET_LEAN_VERIFIED",
+  "b8_pass_inherited": false,
+  "proof_repository": null,
+  "proof_branch": null,
+  "proof_commit": null,
+  "old_b8_source_sha256": "5cb6b69c8f6128111a79a6063cbaeb903e188166b9c23be43dbfb3b98eac7935",
+  "extraction_start_line": 14607,
+  "extraction_end_before_line": 15802,
+  "extracted_text_sha256": "94f0744554909f9649669b740341af8d17049419a5b333498a70fe8c48700c9a",
+  "new_source_sha256": "d6f9e9c3be1d23d40f960cf83a4f5ec0c6e590b9f2a234df5ff9f358891fc091",
+  "declarations": [
+    "LeanCompletion.jsp_001022_eventual_lower_bound",
+    "LeanCompletion.jsp_001022_finite_abel_lower_bound",
+    "LeanCompletion.jsp_001022_reciprocal_weight_specialization",
+    "LeanCompletion.jsp_001022_natural_loglog_lower_bound",
+    "LeanCompletion.jsp_001022_eventual_to_finite_prefix",
+    "LeanCompletion.jsp_001022_density_to_natural_erdos_lower_bound",
+    "LeanCompletion.jsp_001022_density_bridge",
+    "LeanCompletion.erdos_1217_explicit",
+    "LeanCompletion.jsp_001022_chain_strict_cutoff",
+    "LeanCompletion.jsp_001022_reciprocal_strict_cutoff",
+    "LeanCompletion.jsp_001022_erdos_strict_cutoff",
+    "LeanCompletion.jsp_001022_erdos_density_ennreal",
+    "LeanCompletion.jsp_001022_positive_enumeration_sums",
+    "LeanCompletion.jsp_001022_positive_subsequence_indices",
+    "LeanCompletion.jsp_001022_original_enumeration_chain"
+  ],
+  "proof_body_change": "NONE: exact normalized slice from authoritative B8 file",
+  "upstream": {
+    "repository": "https://github.com/YuanheZ/Prim",
+    "commit": "a303f6bd23bb8f29a833d1d70327528359180995",
+    "module": "LeanMarathon.Main",
+    "source_sha256": "8ca5eaef73ffacc9b6e350304a4b4c7e4ee9ec3dd3205af339df63d671ed7085",
+    "source_lines": 14592,
+    "matches_b8_prefix": true,
+    "manifest_sha256": "3dbdf1b94432f7a015e461ee98127df2920b6f575556c030285e11fec62d3b85",
+    "source_vendored_in_contribution": false,
+    "authorization": "NOT_OBTAINED_NO_RIGHTS_CLAIMED"
+  },
+  "manifest_status": "DERIVED_FROM_PINNED_UPSTREAM_REQUIRES_LAKE_VALIDATION",
+  "dependencies": 12,
+  "new_dependencies_vs_b8": [
+    "Prim",
+    "repl"
+  ],
+  "cli_url_differs_from_b8_alias": true,
+  "lean_execution": "NOT_RUN",
+  "semantic_acceptance": "NOT_CLAIMED"
+}

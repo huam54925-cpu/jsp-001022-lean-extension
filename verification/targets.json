@@ -1,0 +1,39 @@
+{
+  "declaration": "LeanCompletion.jsp_001022_original_enumeration_chain",
+  "statement": "∀ a : ℕ+ → ℕ+, StrictMono a →\n  0 < Filter.liminf (fun x : ℝ =>\n    (∑' i : ℕ+, if ((a i : ℕ) : ℝ) < x\n      then ((a i : ℕ) : ℝ)⁻¹ else 0) / Real.log x) Filter.atTop →\n  ∃ k : ℕ+ → ℕ+, StrictMono k ∧\n    (∀ i : ℕ+, (a (k i) : ℕ) ∣ (a (k (i + 1)) : ℕ)) ∧\n    Filter.limsup (fun x : ℝ => ENNReal.ofReal\n      ((∑' i : ℕ+, if ((a i : ℕ) : ℝ) < x\n        then 1 / (((a i : ℕ) : ℝ) * Real.log ((a i : ℕ) : ℝ)) else 0) /\n        Real.log (Real.log x))) Filter.atTop ≤\n    Filter.limsup (fun x : ℝ => ENNReal.ofReal\n      ((Set.ncard {i : ℕ+ | ((a (k i) : ℕ) : ℝ) < x} : ℝ) /\n        Real.log (Real.log x))) Filter.atTop",
+  "support_declarations": [
+    "LeanCompletion.jsp_001022_eventual_lower_bound",
+    "LeanCompletion.jsp_001022_finite_abel_lower_bound",
+    "LeanCompletion.jsp_001022_reciprocal_weight_specialization",
+    "LeanCompletion.jsp_001022_natural_loglog_lower_bound",
+    "LeanCompletion.jsp_001022_eventual_to_finite_prefix",
+    "LeanCompletion.jsp_001022_density_to_natural_erdos_lower_bound",
+    "LeanCompletion.jsp_001022_density_bridge",
+    "LeanCompletion.erdos_1217_explicit",
+    "LeanCompletion.jsp_001022_chain_strict_cutoff",
+    "LeanCompletion.jsp_001022_reciprocal_strict_cutoff",
+    "LeanCompletion.jsp_001022_erdos_strict_cutoff",
+    "LeanCompletion.jsp_001022_erdos_density_ennreal",
+    "LeanCompletion.jsp_001022_positive_enumeration_sums",
+    "LeanCompletion.jsp_001022_positive_subsequence_indices"
+  ],
+  "required_direct_dependencies": [
+    "LeanCompletion.jsp_001022_density_bridge",
+    "LeanCompletion.erdos_1217_explicit",
+    "LeanCompletion.jsp_001022_chain_strict_cutoff",
+    "LeanCompletion.jsp_001022_reciprocal_strict_cutoff",
+    "LeanCompletion.jsp_001022_erdos_density_ennreal",
+    "LeanCompletion.jsp_001022_positive_enumeration_sums",
+    "LeanCompletion.jsp_001022_positive_subsequence_indices"
+  ],
+  "required_dependencies": [
+    "LeanCompletion.jsp_001022_density_bridge",
+    "LeanCompletion.erdos_1217_explicit",
+    "LeanCompletion.jsp_001022_chain_strict_cutoff",
+    "LeanCompletion.jsp_001022_reciprocal_strict_cutoff",
+    "LeanCompletion.jsp_001022_erdos_density_ennreal",
+    "LeanCompletion.jsp_001022_positive_enumeration_sums",
+    "LeanCompletion.jsp_001022_positive_subsequence_indices",
+    "LeanCompletion.jsp_001022_erdos_strict_cutoff"
+  ]
+}

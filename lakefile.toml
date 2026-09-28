@@ -1,0 +1,17 @@
+name = "jsp001022extension"
+version = "0.1.0"
+defaultTargets = ["LeanCompletion"]
+
+[leanOptions]
+pp.unicode.fun = true
+relaxedAutoImplicit = false
+weak.linter.mathlibStandardSet = true
+maxSynthPendingDepth = 3
+
+[[require]]
+name = "Prim"
+git = "https://github.com/YuanheZ/Prim.git"
+rev = "a303f6bd23bb8f29a833d1d70327528359180995"
+
+[[lean_lib]]
+name = "LeanCompletion"
