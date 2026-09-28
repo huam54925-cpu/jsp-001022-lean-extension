@@ -57,8 +57,13 @@ an explicit upstream application, cutoff and density-type conversions, positive
 enumeration and subsequence conversions, and final composition.
 [Attribution](docs/ATTRIBUTION.md) identifies each declaration and separates
 supplemental proofs from wrappers and engineering work. AI assistance was used.
-No mathematical-discovery or first-formalization claim is made;
-[related submissions](docs/RELATED_WORK.md) are identified.
+No mathematical-discovery or first-formalization claim is made.
+[Comparison with plby](docs/COMPARISON_WITH_PLBY.md) records the shared
+mathematical route, distinct finite Abel implementation, plby's stronger density
+comparison, and our contribution relative to Prim.
+[Related submissions](docs/RELATED_WORK.md) are identified; an existing
+formalization of the same problem does not by itself rule out a distinct
+contribution.
 
 ## Reproduce
 
@@ -95,9 +100,11 @@ third-party cache reuse. Commit-specific results and their limitations are
 listed in [the verification document](docs/VERIFICATION.md).
 
 Selected proof commit: `3992abb235729e5ebd0359d897470d6101acf908` (`main`).
-[The completed commit-specific check](verification/2026-09-28/RESULT.md) records
-PASS for build, direct source, exact type, dependencies and axioms on Windows,
-with existing local artifacts reused.
+[The historical verification summary](verification/2026-09-28/RESULT.md)
+records PASS for build, direct source, exact type, dependencies and axioms on
+Windows, with existing local artifacts reused. Raw logs and generated run-output
+files are kept local and excluded from the current repository tree. This
+documentation update does not report a new build.
 
 ## Repository contents
 
@@ -112,6 +119,17 @@ with existing local artifacts reused.
 | `docs/ATTRIBUTION.md` | Contribution boundary and license status |
 | `docs/VERIFICATION.md` | Reproduction instructions and evidence limitations |
 | `docs/RELATED_WORK.md` | Existing formalizations and catalog PRs |
+| `docs/COMPARISON_WITH_PLBY.md` | Fixed-source comparison, contribution boundaries and submission considerations |
+| `docs/REPOSITORY_POLICY.md` | Allowed commit contents, local-only outputs and publication boundaries |
+| `AGENTS.md` | Working rules for coding agents |
+
+## Repository submission rules
+
+Follow [the repository policy](docs/REPOSITORY_POLICY.md) before committing or
+pushing. Commit proof/configuration files, curated documentation and concise
+verification summaries; keep raw logs and generated run artifacts local.
+Upload to this proof repository only when requested. An official awards PR
+requires a separate explicit request.
 
 ## Licensing
 

@@ -15,12 +15,25 @@ PRs. These records are not priority judgments.
 The inspected existing source is
 [`plby/lean-proofs` at `8822f7ddef30fadbd92e1c6ab4ed897af356af5e`](https://github.com/plby/lean-proofs/blob/8822f7ddef30fadbd92e1c6ab4ed897af356af5e/src/latest/ErdosProblems/Erdos1217.lean).
 Its `Erdos1217.erdos_1217` addresses a positive lower logarithmic density
-enumeration and weighted/counting-rate inequality, importing a separate
-resolution module. Only the entry source was inspected here; that project was
-not rebuilt or independently validated in this review.
+enumeration and weighted/counting-rate inequality. The subsequent source review
+traced Resolution and its project imports, and compared the density, chain and
+reindexing proofs. It did not rebuild plby or produce a new elaborated axiom
+audit. The [detailed comparison](COMPARISON_WITH_PLBY.md) records the scope.
 
-Our submission is additional supplemental work over pinned Prim/LeanMarathon:
-Abel estimates, a density bridge and cutoff/enumeration conversions. It does
-not import or port the plby proof. No novelty over all other formalizations,
-earliest priority or defect in that separate proof is asserted. Maintainers
-should consider the related submissions when reviewing contribution and credit.
+Our work supplements pinned Prim/LeanMarathon with a discrete Abel density
+bridge and cutoff/enumeration conversions. plby already proves the same density
+implication and exports the stronger comparison `lowerLogDensity A ≤ weightedRate A`.
+Our finite Abel implementation uses discrete induction; plby uses Mathlib's
+integral Abel identity. Our project does not import plby, but import structure
+and implementation differences alone do not establish development provenance
+or historical independence.
+
+An existing formalization of the same problem is not by itself a reason to
+reject a distinct contribution. Re-registering the same proof and contributing
+different formalization work are separate cases. The
+[official guidance](https://github.com/TheJustinSunPrize/awards/blob/main/CONTRIBUTING.md#before-opening-a-pr)
+recommends comparing related submissions and explaining the differences, and
+says an earlier PR opening time alone does not establish priority. No novelty
+over all other formalizations, earliest priority, defect in plby or award
+entitlement is asserted here. Completeness, provenance and contribution review
+remain necessary.

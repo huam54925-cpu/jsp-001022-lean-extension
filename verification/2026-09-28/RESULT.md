@@ -2,8 +2,9 @@
 
 **PASS for proof commit `3992abb235729e5ebd0359d897470d6101acf908`**, branch `main`,
 [original repository](https://github.com/huam54925-cpu/jsp-001022-lean-extension).
-The files in this evidence directory are added in a later commit and describe
-that selected proof version, not an unexamined later proof version.
+This is a historical summary of the selected proof version. The raw execution
+logs and generated run-output files have been removed from the current tree.
+This documentation and log-cleanup update did not rerun these checks.
 
 ## Executed checks
 
@@ -26,22 +27,19 @@ an external-machine run, compiler bootstrapping, or independent human review.
 The source proof was directly rechecked even though dependencies were reused.
 No official `lean-verify` skill execution is claimed.
 
-## Evidence
+## Retained evidence scope
 
-- [Result and time bounds](result.json)
-- [Command vectors, exit codes and durations](commands.json)
-- [All selected-commit tracked-file hashes](source-sha256.json)
-- [Checked dependency revisions](dependencies.json)
-- [Build transcript](build.log), [direct source transcript](direct-source.log)
-- [Axiom, frozen-type, dependency and module output](audit.log)
-- [Negative-control rejection](negative.log)
+This file records the previous run's results and limitations. Raw command output,
+execution records, dependency/run snapshots and generated log hashes are not
+distributed in the current repository tree. The original local run artifacts
+remain local. This concise submitter summary is not an independent reproduction
+or a newly executed PASS.
 
-Machine-local project, run, Python and toolchain paths in transcripts and command
-records have been replaced by placeholders. The direct-source log is empty
-because that successful command emitted no output. Published-file hashes are
-in [sha256.json](sha256.json); [original log hashes](original-log-sha256.json)
-identify the unredacted local originals. Hashes establish byte identities, not
-independent evidence of correctness.
+The selected commit, locked dependency manifest, proof source, audit module,
+frozen target specification and negative control remain available for
+reproduction. See [the verification instructions](../../docs/VERIFICATION.md).
+The cleanup uses ordinary file deletion; older Git commits may still contain
+the former run-output files.
 
 ## Semantic and attribution scope
 

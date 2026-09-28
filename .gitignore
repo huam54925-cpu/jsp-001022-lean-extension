@@ -8,3 +8,10 @@
 *.dll
 *.zip
 __pycache__/
+
+# Keep raw logs and generated verification output local.
+*.log
+*.log.*
+/logs/
+/verification/20??-??-??/*
+!/verification/20??-??-??/RESULT.md

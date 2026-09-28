@@ -89,6 +89,12 @@ choice for supplemental work is left to its responsible contributor.
 ## Related work and verification
 
 [RELATED_WORK.md](RELATED_WORK.md) identifies the existing plby formalization
-and catalog submissions. This repository does not import it and makes no
-first-publication claim. Build and axiom checks are supporting verification
-evidence, not independent authorship evidence. See [VERIFICATION.md](VERIFICATION.md).
+and catalog submissions. [COMPARISON_WITH_PLBY.md](COMPARISON_WITH_PLBY.md)
+compares the fixed proof bodies: the overall route is shared, the finite Abel
+implementation differs, and plby exports the stronger density comparison.
+Our incremental scope is relative to pinned Prim; the discrete main-term
+estimate and full chain construction remain credited to that upstream.
+This repository does not import plby and makes no first-publication claim.
+Implementation differences alone do not establish independent development.
+Build and axiom checks are supporting verification evidence, not independent
+authorship evidence. See [VERIFICATION.md](VERIFICATION.md).
