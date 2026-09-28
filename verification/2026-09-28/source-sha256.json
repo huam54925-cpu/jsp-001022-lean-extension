@@ -1,0 +1,18 @@
+{
+  ".gitignore": "361aecd39324122045cb36b8b252b1b8e98af93a5b0e6ab8100e2d0c9d87b53a",
+  "LeanCompletion.lean": "d77e0bdcc338d03747a06c63b6f1547d5276781243149ddc613b239eeedebaf5",
+  "LeanCompletion/Audit.lean": "908eea97db14196f294692aa2f90a7e345e323e98eebec8cb17a8f8910d0e81e",
+  "LeanCompletion/JSP001022.lean": "d6f9e9c3be1d23d40f960cf83a4f5ec0c6e590b9f2a234df5ff9f358891fc091",
+  "README.md": "a7cc79c886df36f45bf269caebc53cd94314b619d44c67fb802cb7dcd82b0780",
+  "docs/ATTRIBUTION.md": "02b54ed47aa63ac273b1e3c06f47e93b57b91340b8a1a02de9732f728db349c7",
+  "docs/RELATED_WORK.md": "217d281659928d2f0ea2f9af30d671428261d84bc8449a560ef5486abdf74059",
+  "docs/STATEMENT.md": "80fef46fc26e0cd290b2f8ce05134d79df46bd3ea8d3f869497cb2cca6e69884",
+  "docs/STATEMENT_CORRESPONDENCE.md": "71a8f2578630119d54b227be42610feb4ff33694fcf91ec3c4c30d80588c4a28",
+  "docs/VERIFICATION.md": "e36c1fc513ee1d5af15483821a820810166f45343ff14295db8a528203a6a8bf",
+  "lake-manifest.json": "e3b083f0ad1e2e3abedff90e571bcfcbda567d2cd817c77ee710f32cc29ab418",
+  "lakefile.toml": "cfa4f5ba5a0eb8e2d799a235af32c356ee30e0b2c07d40d7e871d7d2649823ad",
+  "lean-toolchain": "ce4c4e3d87434b9663f46de25ce34b48a0cf0d392e0a320a0787b4674a2d7b61",
+  "preparation.json": "83ebb14b1ab04281f5c2d619b8b5ee60fd0d030398c57d00259233f54f813850",
+  "verification/Negative.lean": "422415ffa67fb9ab5aa2a570ec7299205fcca573d1c9f35be311aaf606ebe1ba",
+  "verification/targets.json": "286cc602d56bfb7ff1edf49f723aa4f3a097a8594dcef0db00175674dc3223da"
+}

@@ -1,0 +1,82 @@
+[
+  {
+    "stage": "lean_version",
+    "command": [
+      "<PINNED_TOOLCHAIN_BIN>\\lean.exe",
+      "--version"
+    ],
+    "cwd": "<PROJECT>",
+    "returncode": 0,
+    "timed_out": false,
+    "interrupted": false,
+    "seconds": 0.065,
+    "log": "<RUN>\\logs\\001_lean_version.log"
+  },
+  {
+    "stage": "default_build",
+    "command": [
+      "<PINNED_TOOLCHAIN_BIN>\\lake.exe",
+      "--no-cache",
+      "--rehash",
+      "--no-ansi",
+      "build"
+    ],
+    "cwd": "<PROJECT>",
+    "returncode": 0,
+    "timed_out": false,
+    "interrupted": false,
+    "seconds": 163.66,
+    "log": "<RUN>\\logs\\026_default_build.log"
+  },
+  {
+    "stage": "direct_source",
+    "command": [
+      "<PINNED_TOOLCHAIN_BIN>\\lake.exe",
+      "--no-cache",
+      "--no-build",
+      "env",
+      "<PINNED_TOOLCHAIN_BIN>\\lean.exe",
+      "LeanCompletion/JSP001022.lean"
+    ],
+    "cwd": "<PROJECT>",
+    "returncode": 0,
+    "timed_out": false,
+    "interrupted": false,
+    "seconds": 44.347,
+    "log": "<RUN>\\logs\\027_direct_source.log"
+  },
+  {
+    "stage": "target_audit",
+    "command": [
+      "<PINNED_TOOLCHAIN_BIN>\\lake.exe",
+      "--no-cache",
+      "--no-build",
+      "env",
+      "<PINNED_TOOLCHAIN_BIN>\\lean.exe",
+      "LeanCompletion/Audit.lean"
+    ],
+    "cwd": "<PROJECT>",
+    "returncode": 0,
+    "timed_out": false,
+    "interrupted": false,
+    "seconds": 38.06,
+    "log": "<RUN>\\logs\\028_target_audit.log"
+  },
+  {
+    "stage": "negative_control",
+    "command": [
+      "<PINNED_TOOLCHAIN_BIN>\\lake.exe",
+      "--no-cache",
+      "--no-build",
+      "env",
+      "<PINNED_TOOLCHAIN_BIN>\\lean.exe",
+      "verification/Negative.lean"
+    ],
+    "cwd": "<PROJECT>",
+    "returncode": 1,
+    "timed_out": false,
+    "interrupted": false,
+    "seconds": 37.139,
+    "log": "<RUN>\\logs\\030_negative_control.log"
+  }
+]

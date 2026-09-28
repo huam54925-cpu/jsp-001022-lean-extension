@@ -94,6 +94,11 @@ dependency pins and module paths. It was a same-host check with declared
 third-party cache reuse. Commit-specific results and their limitations are
 listed in [the verification document](docs/VERIFICATION.md).
 
+Selected proof commit: `3992abb235729e5ebd0359d897470d6101acf908` (`main`).
+[The completed commit-specific check](verification/2026-09-28/RESULT.md) records
+PASS for build, direct source, exact type, dependencies and axioms on Windows,
+with existing local artifacts reused.
+
 ## Repository contents
 
 | Path | Purpose |

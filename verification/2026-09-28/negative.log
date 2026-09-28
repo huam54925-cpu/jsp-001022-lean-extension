@@ -1,0 +1,20 @@
+LeanCompletion.jsp_001022_original_enumeration_chain (a : ℕ+ → ℕ+) :
+  StrictMono a →
+    0 < Filter.liminf (fun x => (∑' (i : ℕ+), if ↑↑(a i) < x then (↑↑(a i))⁻¹ else 0) / Real.log x) Filter.atTop →
+      ∃ k,
+        StrictMono k ∧
+          (∀ (i : ℕ+), ↑(a (k i)) ∣ ↑(a (k (i + 1)))) ∧
+            Filter.limsup
+                (fun x =>
+                  ENNReal.ofReal
+                    ((∑' (i : ℕ+), if ↑↑(a i) < x then 1 / (↑↑(a i) * Real.log ↑↑(a i)) else 0) /
+                      Real.log (Real.log x)))
+                Filter.atTop ≤
+              Filter.limsup (fun x => ENNReal.ofReal (↑{i | ↑↑(a (k i)) < x}.ncard / Real.log (Real.log x)))
+                Filter.atTop
+verification/Negative.lean:4:2: error: Tactic `rfl` failed: The left-hand side
+  0
+is not definitionally equal to the right-hand side
+  1
+
+⊢ 0 = 1

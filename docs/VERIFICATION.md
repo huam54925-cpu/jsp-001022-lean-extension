@@ -4,6 +4,15 @@ Use the full selected proof SHA from the submission or commit-specific report.
 Evidence can be added in a later commit that explicitly identifies the earlier
 proof commit. Do not infer that an older run checked later code.
 
+## Selected proof and completed check
+
+Selected proof commit: `3992abb235729e5ebd0359d897470d6101acf908`, branch `main`.
+The [2026-09-28 report](../verification/2026-09-28/RESULT.md) records PASS for
+that exact commit: default build, direct source, frozen type, proof dependencies,
+axioms, module paths, negative control and all dependency pins. It used the
+existing Windows checkout and local artifacts; no fresh-clone or cache-free
+claim is made. The report is stored in a later evidence-only commit.
+
 ## Pins and prerequisites
 
 - Lean: `leanprover/lean4:v4.30.0-rc2` (`lean-toolchain`).
