@@ -1,0 +1,55 @@
+\section{环境整除链与集合内子链}\label{sec:chain}
+密度转换之后，还需要一个实质性的数论结果。Alexeev 等人\cite[Theorem 1.6]{alexeev2026}证明了如下结论；其概率论证位于该文第~9~节。
+\begin{theorem}[双对数密度整除链定理，已有结果]\label{thm:upstream}
+设 $A\subseteq\N_{>0}$，且
+\[
+ \Delta(A)=\limsu\frac{W_A^{\le}(x)}{\log\log x}>0.
+\]
+则存在严格递增的无限整除链 $b_0\mid b_1\mid b_2\mid\cdots$，其所有元素属于 $A$，并满足
+\begin{equation}\label{eq:upstream-bound}
+ \limsu\frac{\#\{j\ge0:b_j\le x\}}{\log\log x}\ge\Delta(A).
+\end{equation}
+左侧允许取值 $+\infty$。
+\end{theorem}
+
+\subsection{概率构造需要提供的结论}
+上述定理可分成环境链的构造和集合内子链的提取。第一个部分需要证明：存在一条严格递增的正整数整除链 $m_0\mid m_1\mid\cdots$，使
+\begin{equation}\label{eq:ambient-hits}
+ \limsu\frac{\#\{i\ge0:m_i\in A,\ m_i\le x\}}{\log\log x}
+ \ge\Delta(A).
+\end{equation}
+此时不要求所有 $m_i$ 属于 $A$。这一步对应 Prim 的环境链定理，不能仅由密度定义直接得到。
+
+为明确下一阶段需要展开什么，记随机环境链的访问次数为
+\[
+ Z_A(x)=\#\{i\ge0:m_i\in A,\ m_i\le x\}.
+\]
+参考论文的论证需要依次建立：von Mangoldt 不变权重 $\nu_\Lambda$ 及其伴随向上转移核；从 $1$ 出发的无限随机整除链；访问概率恒等式
+\begin{equation}\label{eq:visit-goal}
+ \sum_{i\ge0}\mathbb P(m_i=n)=\nu_\Lambda(n);
+\end{equation}
+以及权重比较和二阶矩估计
+\begin{equation}\label{eq:moment-goals}
+ \sum_{\substack{n\in A\\n\le x}}\nu_\Lambda(n)=W_A^{\le}(x)+O(1),
+ \qquad \mathbb E Z_A(x)^2\ll(\log\log x)^2.
+\end{equation}
+沿使加权密度趋于 $\Delta(A)$ 的尺度序列归一化后，再用截断形式的反向 Fatou 论证，才能选出满足~\eqref{eq:ambient-hits}~的同一条确定性路径。仅在每个尺度分别选出一条长的有限链，并不能保证这些链相容。
+
+本阶段已定位这些结论的源码入口，见第~\ref{sec:formal}~节及随稿检索清单。本小节记录其准确作用，尚未将随机核构造、二阶矩估计及反向 Fatou 的详细证明展开为正文。
+
+\subsection{从访问指标抽取子链}
+\begin{lemma}[集合内子链提取]\label{lem:extract}
+若 $\Delta(A)>0$，且严格递增的环境整除链 $(m_i)$ 满足~\eqref{eq:ambient-hits}，则它包含满足~\eqref{eq:upstream-bound}~的集合内无限子链。
+\end{lemma}
+\begin{proof}
+设 $I=\{i\ge0:m_i\in A\}$。若 $I$ 有限，则访问次数至多为 $\#I$，除以趋于无穷的 $\log\log x$ 后极限为零，与~\eqref{eq:ambient-hits}~矛盾。故可将 $I$ 递增枚举为 $i_0<i_1<\cdots$，并令 $b_j=m_{i_j}$。
+
+严格递增性立即保留。由环境链相邻项的整除关系及传递性，$m_r\mid m_s$ 对所有 $r<s$ 成立，故 $b_j\mid b_{j+1}$。又因 $j\mapsto i_j$ 是到 $I$ 的双射，对每个 $x$ 都有精确的计数恒等式
+\[
+ \#\{j\ge0:b_j\le x\}
+ =\#\{i\ge0:m_i\in A,\ m_i\le x\}.
+\]
+因而所需的上极限下界原样保留。
+\end{proof}
+
+这样，已有整除链定理的证明职责被分解为：先证明概率方法给出的~\eqref{eq:ambient-hits}，再应用引理~\ref{lem:extract}。本稿当前对前者作有明确来源的引用，对后者给出完整推导；尚不把这一阶段描述为对上游全部证明的逐项复现。

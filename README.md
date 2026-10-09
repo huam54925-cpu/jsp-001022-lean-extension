@@ -143,3 +143,11 @@ repository; its source and build products are excluded here. Each dependency
 retains its own authorship and applicable terms. This repository does not attach
 an additional license to the supplemental work. See
 [Attribution](docs/ATTRIBUTION.md#licensing-and-third-party-material).
+
+## 中文数学证明阐释（第一阶段）
+
+- [修改说明、数学结论与下一阶段交接](docs/JSP001022_STAGE1_REVIEW.md)
+- [分章 LaTeX 文章](papers/jsp001022_exposition/README.md)
+- [固定源码入口与显式引用关系](docs/JSP001022_SOURCE_GUIDE.md)
+
+这是阶段性说明文稿；随机链的详细正文仍待展开。本分支未运行新的 Lean 或 LaTeX 编译。

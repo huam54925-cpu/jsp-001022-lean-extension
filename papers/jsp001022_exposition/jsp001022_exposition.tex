@@ -1,0 +1,38 @@
+% 第一阶段修订：按数学论证分章；本轮不编译。
+% 参考 arXiv:2605.00301v1 的单栏、紧凑摘要、居中节标题与左侧公式编号。
+\documentclass[UTF8,11pt,a4paper,scheme=plain,leqno]{ctexart}
+\usepackage[margin=2.7cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools,enumitem,booktabs,longtable,array}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\urlstyle{tt}
+\ctexset{section={format=\centering\large\bfseries,beforeskip=1.8ex plus .4ex,afterskip=1.2ex},
+  subsection={format=\normalsize\bfseries,beforeskip=1.4ex,afterskip=.6ex}}
+\setlength{\parindent}{2em}
+\setlength{\parskip}{0pt}
+\setlength{\emergencystretch}{1.5em}
+\numberwithin{equation}{section}
+\newtheoremstyle{chineseplain}{.7\baselineskip}{.5\baselineskip}{\normalfont}{}{\bfseries}{.}{.5em}{}
+\theoremstyle{chineseplain}
+\newtheorem{theorem}{定理}[section]
+\newtheorem{lemma}[theorem]{引理}
+\newtheorem{remark}[theorem]{说明}
+\newtheorem{proposition}[theorem]{命题}
+\newcommand{\N}{\mathbb N}
+\newcommand{\limin}{\liminf_{x\to\infty}}
+\newcommand{\limsu}{\limsup_{x\to\infty}}
+\title{\large\bfseries 正下对数密度与无限整除链\\JSP-001022 的数学证明与形式化对应}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\begin{abstract}
+本文整理正下对数密度整数序列中无限整除链的证明结构。首先证明一般非负数列的有限 Abel 下界，再通过离散双对数主项估计建立密度转移。随后将已有整除链定理分解为环境链构造与集合内子链提取，并说明端点、枚举和极限值域的转换。最后统一列出固定版本 Lean 源码中的声明对应与显式引用关系。本阶段完整展开密度转换与子链提取；随机链构造和矩估计的详细阐释留待后续补充。
+\end{abstract}
+\input{sections/01-introduction}
+\input{sections/02-density}
+\input{sections/03-chain}
+\input{sections/04-conversions}
+\input{sections/05-formalization}
+\input{sections/references}
+\end{document}

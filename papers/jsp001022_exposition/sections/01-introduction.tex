@@ -1,0 +1,46 @@
+\section{引言}
+整除偏序中的密度条件如何保证一条无限链，是 JSP-001022（Erdős Problem \#1217）的核心问题。本文先讨论有限 Abel 求和所提供的密度转移，再说明已有整除链定理的两个组成部分，最后统一处理形式化中的表示和依赖关系。整除链定理的数学来源为 Alexeev 等人的论文\cite{alexeev2026}；本文是证明阐释，不主张新的数论结论。
+
+\subsection{问题陈述与记号}
+考虑严格递增的正整数序列 $a_1<a_2<\cdots$，令 $A=\{a_i:i\ge1\}$。对于 $x>e$，定义
+\begin{align}
+H_A(x)&=\sum_{a\in A,\,a<x}\frac1a,\\
+W_A(x)&=\sum_{a\in A,\,2\le a<x}\frac1{a\log a}.
+\end{align}
+采用自然对数及严格截断 $a<x$。在 $a=1$ 处不计算 $1/(a\log a)$，等价于将该权重定义为零。记
+\begin{equation}\label{eq:densities}
+\underline\delta_{\log}(A)=\limin\frac{H_A(x)}{\log x},\qquad
+\overline\delta_{\log\log}(A)=\limsu\frac{W_A(x)}{\log\log x}.
+\end{equation}
+第二个上极限在本文所涉及的非负情形下可以放入 $[0,+\infty]$ 理解。对于一个严格递增的指标序列 $k_1<k_2<\cdots$，定义 $b_i=a_{k_i}$ 和
+\begin{equation}
+C_{a,k}(x)=\#\{i\ge1:a_{k_i}<x\}.
+\end{equation}
+\begin{theorem}[JSP-001022 的枚举形式]\label{thm:main}
+若
+\begin{equation}\label{eq:assumption}
+\underline\delta_{\log}(A)>0,
+\end{equation}
+则存在严格递增的正整数指标序列 $(k_i)_{i\ge1}$，满足
+\begin{equation}\label{eq:divides}
+a_{k_i}\mid a_{k_{i+1}}\qquad(i\ge1),
+\end{equation}
+并且
+\begin{equation}\label{eq:target}
+\limsu\frac{C_{a,k}(x)}{\log\log x}
+\ge\limsu\frac{W_A(x)}{\log\log x}.
+\end{equation}
+式 \eqref{eq:target} 按照允许 $+\infty$ 的扩展非负实数上极限解释。
+\end{theorem}
+应注意量词顺序：只选择\emph{一条固定}的链，而不是令其随截断参数 $x$ 改变。上极限的不等式也不是在每个足够大的 $x$ 逐点成立的结论。
+
+
+\subsection{证明路线与本阶段范围}
+证明的主干为
+\[
+ \underline\delta_{\log}(A)>0
+ \ \Longrightarrow\ \overline\delta_{\log\log}(A)>0
+ \ \Longrightarrow\ \text{具有定量访问下界的环境整除链}
+ \ \Longrightarrow\ \text{集合内无限子链}.
+\]
+第~\ref{sec:density}~节展开第一步的有限不等式、误差估计和极限过程。第~\ref{sec:chain}~节精确陈述已有整除链结果，证明子链提取，并列明概率构造需要提供的结论；概率部分的详细证明留待后续阶段补充。第~\ref{sec:conversion}~节完成端点与枚举转换。最后一节集中给出固定版本源码的对应关系与核查边界。
