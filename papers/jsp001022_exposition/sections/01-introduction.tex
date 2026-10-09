@@ -12,7 +12,8 @@ W_A(x)&=\sum_{a\in A,\,2\le a<x}\frac1{a\log a}.
 \underline\delta_{\log}(A)=\limin\frac{H_A(x)}{\log x},\qquad
 \overline\delta_{\log\log}(A)=\limsu\frac{W_A(x)}{\log\log x}.
 \end{equation}
-第二个上极限在本文所涉及的非负情形下可以放入 $[0,+\infty]$ 理解。对于一个严格递增的指标序列 $k_1<k_2<\cdots$，定义 $b_i=a_{k_i}$ 和
+以下统一记 $\Delta(A):=\overline\delta_{\log\log}(A)$。调和和的积分比较及第~\ref{sec:density}~节的全体整数加权和估计给出
+$0\le\underline\delta_{\log}(A)\le1$ 和 $0\le\Delta(A)\le1$，故这两个密度均为有限实数；后文链计数的归一化上极限则允许为 $+\infty$。对于一个严格递增的指标序列 $k_1<k_2<\cdots$，定义 $b_i=a_{k_i}$ 和
 \begin{equation}
 C_{a,k}(x)=\#\{i\ge1:a_{k_i}<x\}.
 \end{equation}
@@ -43,4 +44,4 @@ a_{k_i}\mid a_{k_{i+1}}\qquad(i\ge1),
  \ \Longrightarrow\ \text{具有定量访问下界的环境整除链}
  \ \Longrightarrow\ \text{集合内无限子链}.
 \]
-第~\ref{sec:density}~节展开第一步的有限不等式、误差估计和极限过程。第~\ref{sec:chain}~节精确陈述已有整除链结果，证明子链提取，并列明概率构造需要提供的结论；概率部分的详细证明留待后续阶段补充。第~\ref{sec:conversion}~节完成端点与枚举转换。最后一节集中给出固定版本源码的对应关系与核查边界。
+第~\ref{sec:density}~节展开第一步的有限不等式、误差估计和极限过程。第~\ref{sec:chain}~节从不变权重和随机链构造出发，证明访问恒等式、矩估计、确定性路径选择及子链提取。第~\ref{sec:conversion}~节完成端点与枚举转换。最后一节集中给出固定版本源码的对应关系与核查边界。

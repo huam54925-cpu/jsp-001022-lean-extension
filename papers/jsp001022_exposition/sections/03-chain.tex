@@ -567,14 +567,14 @@ Prim 的对应证明同样截断，但采用 $Y_j\le\min(Y_j,R)+Y_j^2/R$ 直接�
 再令 $T\to\infty$，得到扩展非负实数意义下的结论
 \begin{equation}\label{eq:ambient-hits}
  \boxed{\limsu\frac{\#\{i\ge0:m_i\in A,\ m_i\le x\}}{\log\log x}
- \ge F(\omega_0)\ge\Delta(A).}
+ \ge\Delta(A).}
 \end{equation}
 这里只对可数尺度序列的上极限取积分；全体实数尺度的比较是固定样本后的数值不等式，无需声称不可数上确界作为随机变量可测。
 样本 $\omega_0$ 可以依赖于集合 $A$，但不再随截断尺度改变。因此所得是同一条无限环境链，而不是对每个尺度分别挑选不同的有限链。若某条路径的上极限为无穷，它同样满足所需下界。下一小节从这条固定环境链中提取属于 $A$ 的无限子链。
 
 \subsection{从访问指标抽取子链}
 \begin{lemma}[集合内子链提取]\label{lem:extract}
-若 $\Delta(A)>0$，且严格递增的环境整除链 $(m_i)$ 满足~\eqref{eq:ambient-hits}，则它包含满足~\eqref{eq:upstream-bound}~的集合内无限子链。
+若 $\Delta(A)>0$，且严格递增的正整数环境整除链 $(m_i)_{i\ge0}$ 满足~\eqref{eq:ambient-hits}，则它包含满足~\eqref{eq:upstream-bound}~的集合内无限子链。
 \end{lemma}
 \begin{proof}
 设 $I=\{i\ge0:m_i\in A\}$。若 $I$ 有限，则访问次数至多为 $\#I$，除以趋于无穷的 $\log\log x$ 后极限为零，与~\eqref{eq:ambient-hits}~矛盾。故可将 $I$ 递增枚举为 $i_0<i_1<\cdots$，并令 $b_j=m_{i_j}$。
