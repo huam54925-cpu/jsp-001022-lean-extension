@@ -114,7 +114,13 @@ $W_A^{\le}(x)=W_A^{\le}(N)$，且
 \[
  \frac{\log\log\lfloor x\rfloor}{\log\log x}\longrightarrow1.
 \]
-后一个极限由 $\lfloor x\rfloor/x\to1$ 及对数的连续性得到。将式~\eqref{eq:natural-bound}~除以 $\log\log x$，便有
+具体地，当 $x\ge3$ 时，$2\le N\le x<2N$，故
+\[
+ 0\le\log\log x-\log\log N
+ =\log\left(1+\frac{\log(x/N)}{\log N}\right)
+ \le\frac{\log2}{\log N}\longrightarrow0.
+\]
+结合 $\log\log x\to\infty$ 即得上述比值极限。将式~\eqref{eq:natural-bound}~除以 $\log\log x$，便有
 \begin{equation}\label{eq:quantbridge}
  \limin\frac{W_A^{\le}(x)}{\log\log x}\ge c.
 \end{equation}

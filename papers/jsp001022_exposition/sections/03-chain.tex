@@ -12,34 +12,570 @@
 左侧允许取值 $+\infty$。
 \end{theorem}
 
-\subsection{概率构造需要提供的结论}
-上述定理可分成环境链的构造和集合内子链的提取。第一个部分需要证明：存在一条严格递增的正整数整除链 $m_0\mid m_1\mid\cdots$，使
-\begin{equation}\label{eq:ambient-hits}
- \limsu\frac{\#\{i\ge0:m_i\in A,\ m_i\le x\}}{\log\log x}
- \ge\Delta(A).
-\end{equation}
-此时不要求所有 $m_i$ 属于 $A$。这一步对应 Prim 的环境链定理，不能仅由密度定义直接得到。
-
-为明确下一阶段需要展开什么，记随机环境链的访问次数为
+\subsection{von Mangoldt 函数与不变权重}
+以下状态空间为 $S=\N_{>0}$，时间指标为 $\N_0$。记
 \[
- Z_A(x)=\#\{i\ge0:m_i\in A,\ m_i\le x\}.
+ \Lambda(n)=\begin{cases}\log p,&n=p^k,\ p\text{ 为素数},\ k\ge1,\\0,&\text{其他情形}.
+ \end{cases}
 \]
-参考论文的论证需要依次建立：von Mangoldt 不变权重 $\nu_\Lambda$ 及其伴随向上转移核；从 $1$ 出发的无限随机整除链；访问概率恒等式
-\begin{equation}\label{eq:visit-goal}
- \sum_{i\ge0}\mathbb P(m_i=n)=\nu_\Lambda(n);
+特别地，$\Lambda(1)=0$。若 $n=\prod_p p^{v_p(n)}$，则
+\begin{equation}\label{eq:mangoldt-divisors}
+ \sum_{d\mid n}\Lambda(d)=\sum_p\sum_{k=1}^{v_p(n)}\log p
+ =\sum_p v_p(n)\log p=\log n.
 \end{equation}
-以及权重比较和二阶矩估计
-\begin{equation}\label{eq:moment-goals}
- \sum_{\substack{n\in A\\n\le x}}\nu_\Lambda(n)=W_A^{\le}(x)+O(1),
- \qquad \mathbb E Z_A(x)^2\ll(\log\log x)^2.
-\end{equation}
-沿使加权密度趋于 $\Delta(A)$ 的尺度序列归一化后，再用截断形式的反向 Fatou 论证，才能选出满足~\eqref{eq:ambient-hits}~的同一条确定性路径。仅在每个尺度分别选出一条长的有限链，并不能保证这些链相容。
+$n=1$ 时两边均为零。
 
-本阶段已定位这些结论的源码入口，见第~\ref{sec:formal}~节及随稿检索清单。本小节记录其准确作用，尚未将随机核构造、二阶矩估计及反向 Fatou 的详细证明展开为正文。
+令 $\zeta(s)=\sum_{r\ge1}r^{-s}$，其中 $s>1$。原论文\cite[Example 2.8]{alexeev2026}和固定版本 Prim 使用的权重是
+\begin{equation}\label{eq:mangoldt-weight-exact}
+ \boxed{\nu_\Lambda(1)=1,\qquad
+ \nu_\Lambda(n)=\int_1^\infty\frac{\log n}{\zeta(s)n^s}\,ds\quad(n\ge2).}
+\end{equation}
+Prim 的积分区间为 $(1,\infty)$，分母写作复 Riemann $\zeta$ 函数在实参数处的实部；在此区间它就是上式的正实数 $\zeta(s)$。本节始终排除状态 $0$。
+因为 $\zeta(s)>1$，被积函数连续且严格为正，并由可积函数 $\log n\,n^{-s}$ 控制，所以
+\[
+ 0<\nu_\Lambda(n)\le\int_1^\infty\log n\,n^{-s}\,ds=\frac1n
+ \qquad(n\ge2).
+\]
+这同时说明积分的有限性与权重的严格正性。Erd\H{o}s 权重则为
+$\nu_0(n)=1/(n\log n)$（$n\ge2$）；为统一求和可令 $\nu_0(1)=0$。两种权重在 $1$ 处尤其不能混淆，其总和的比较留待第~3.3~小节。
+
+不变权重的作用是平衡从较大整数流入较小整数的\emph{严格整除}转移。它不是总质量为 $1$ 的概率分布，也不是把状态 $1$ 的吸收自环包括在内的平稳分布。所需的准确恒等式如下。
+\begin{proposition}[严格入流恒等式]\label{prop:mangoldt-inflow}
+对每个 $n\ge1$，均有收敛的非负级数恒等式
+\begin{equation}\label{eq:mangoldt-inflow}
+ \boxed{\sum_{q\ge2}\nu_\Lambda(nq)\frac{\Lambda(q)}{\log(nq)}
+ =\nu_\Lambda(n).}
+\end{equation}
+\end{proposition}
+\begin{proof}
+写 $h(s)=1/\zeta(s)$。由积分比较，
+\[
+ \frac1{s-1}\le\zeta(s)\le1+\frac1{s-1},\qquad \zeta(s)\ge1,
+\]
+故 $h(1+)=0$，$h(+\infty)=1$。Euler 乘积的对数导数给出
+\begin{equation}\label{eq:reciprocal-zeta-derivative}
+ -\frac{\zeta'(s)}{\zeta(s)}=\sum_{q\ge2}\frac{\Lambda(q)}{q^s},
+ \qquad h'(s)=h(s)\sum_{q\ge2}\frac{\Lambda(q)}{q^s}\ge0.
+\end{equation}
+这里的逐项求导可在每个 $s\ge1+\varepsilon$ 的区间上用绝对、一致收敛证明；例如 $\Lambda(q)\le\log q$，而 $\sum_{q\ge2}(\log q)q^{-1-\varepsilon}$ 收敛。
+在有限区间应用微积分基本定理，再令端点趋向 $1$ 与无穷，由非负性得到
+\begin{equation}\label{eq:reciprocal-zeta-total-derivative}
+ \int_1^\infty h'(s)\,ds=1.
+\end{equation}
+将~\eqref{eq:mangoldt-weight-exact}~代入左端，由 Tonelli 定理交换非负求和与积分，得到
+\begin{align*}
+ \sum_{q\ge2}\nu_\Lambda(nq)\frac{\Lambda(q)}{\log(nq)}
+ &=\int_1^\infty n^{-s}h(s)\sum_{q\ge2}\Lambda(q)q^{-s}\,ds\\
+ &=\int_1^\infty n^{-s}h'(s)\,ds.
+\end{align*}
+交换时可先允许积分取扩展非负实数值；最后一个积分不超过 $\int h'=1$，因此也证明了级数的有限性，没有预先假设待证的可和性。
+当 $n=1$ 时，结果由~\eqref{eq:reciprocal-zeta-total-derivative}~给出，恰为定义中的 $\nu_\Lambda(1)=1$。
+当 $n\ge2$ 时，在 $[a,b]\subset(1,\infty)$ 上分部积分，然后令 $a\downarrow1$、$b\to\infty$：
+\[
+ \int_1^\infty n^{-s}h'(s)\,ds
+ =[n^{-s}h(s)]_{1+}^{\infty}
+   +\log n\int_1^\infty n^{-s}h(s)\,ds
+ =\nu_\Lambda(n).
+\]
+边界项均为零；左侧由 $h'$ 控制，右侧被积函数由 $n^{-s}$ 控制，所以此极限步骤合法。
+\end{proof}
+
+本文所称的不变权重，是相对于严格下降整除转移的入流平衡权重，而不是包含状态 $1$ 吸收自环的平稳概率分布。
+
+上述推导对应 Prim 的不变递推声明。正文采用非负积分的 Tonelli 论证；源码则先建立绝对可积求和的桥接等式，再调用倒数 $\zeta$ 的端点评估。两者的数学职责相同，但不能据此声称正文的每个中间不等式都已有同名 Lean 声明。
+
+\subsection{从下降整除链构造向上转移核}
+\paragraph{下降核与边界。}
+在 $S$ 上定义
+\begin{equation}\label{eq:downward-kernel}
+ P_\downarrow(n,m)=
+ \begin{cases}
+ 1,&n=m=1,\\
+ \Lambda(n/m)/\log n,&n\ge2,\ m\mid n,\ m<n,\\
+ 0,&\text{其他情形}.
+ \end{cases}
+\end{equation}
+$n\ge2$ 时分母严格为正，故所有转移概率非负。映射 $m\mapsto q=n/m$ 将正真因子与满足 $q\mid n$、$q>1$ 的因子一一对应。由~\eqref{eq:mangoldt-divisors}，
+\[
+ \sum_{m\in S}P_\downarrow(n,m)
+ =\frac1{\log n}\sum_{\substack{q\mid n\\q>1}}\Lambda(q)=1.
+\]
+$n=1$ 的行和则由吸收自环给出。因而它是一个下降 Markov 核，除吸收状态 $1$ 外仅沿严格整除关系转移。
+
+\paragraph{伴随向上核。}
+利用权重的严格正性，定义
+\begin{equation}\label{eq:upward-kernel}
+ U(m,n)=P_\uparrow(m,n)=
+ \begin{cases}
+ \displaystyle\frac{\nu_\Lambda(n)}{\nu_\Lambda(m)}P_\downarrow(n,m),&m\ne n,\\
+ 0,&m=n.
+ \end{cases}
+\end{equation}
+等价地，$U(m,mq)=\nu_\Lambda(mq)\Lambda(q)/(\nu_\Lambda(m)\log(mq))$（$q\ge2$），其余项为零。因此 $U\ge0$，且
+\[
+ U(m,n)>0\ \Longrightarrow\ m<n,\quad m\mid n;
+\]
+更精确地，商 $n/m$ 必须为素数幂。重新以 $n=mq$ 编号，再应用命题~\ref{prop:mangoldt-inflow}，得到每个 $m\ge1$ 的行和
+\begin{equation}\label{eq:upward-normalization}
+ \sum_{n\in S}U(m,n)
+ =\frac1{\nu_\Lambda(m)}\sum_{q\ge2}
+    \nu_\Lambda(mq)\frac{\Lambda(q)}{\log(mq)}=1.
+\end{equation}
+伴随平衡关系
+\[
+ \nu_\Lambda(m)U(m,n)=\nu_\Lambda(n)P_\downarrow(n,m)
+\]
+仅对 $m\ne n$ 声明。在 $(1,1)$ 处，右侧为 $1$ 而左侧为 $0$；若把下降核的吸收自环也搬到向上核，则会破坏归一化。
+
+原论文\cite[Definition 2.9, Example 2.11]{alexeev2026}允许加入状态 $\infty$，并把有限行和的亏损赋给 $U(m,\infty)$。本例由~\eqref{eq:upward-normalization}~知该亏损为零。从 $1$ 出发，在任一有限步到达 $\infty$ 的概率为零，所有步的可数并仍为零。因此可直接在 $S$ 上构造无限时间的链；整数状态随时间趋于无穷，并不意味着某一有限时刻跳到附加状态 $\infty$。
+
+\paragraph{同一无限路径空间上的构造。}
+给 $S$ 配备离散 $\sigma$-代数，以 $\delta_1$ 为初始分布，以 $U$ 为转移核。每一行都是概率质量函数，可测性在可数离散空间上自动成立。Ionescu--Tulcea 定理于是给出乘积可测空间 $S^{\N_0}$ 上的唯一概率测度，使坐标过程 $(X_i)$ 的柱集概率为
+\begin{equation}\label{eq:chain-cylinders}
+ \mathbb P(X_0=n_0,\ldots,X_r=n_r)
+ =\mathbf1_{\{n_0=1\}}\prod_{i=0}^{r-1}U(n_i,n_{i+1}).
+\end{equation}
+这些有限维分布的相容性正是行和为 $1$：对最后一个坐标求和就恢复前一阶分布。该定理把全部相容分布放到\emph{同一个}无限乘积空间上，坐标投影均可测。特别地，对任意 $k,m,n$ 有
+\begin{equation}\label{eq:chain-pair-law}
+ \mathbb P(X_k=m,X_{k+1}=n)=\mathbb P(X_k=m)U(m,n).
+\end{equation}
+
+还需将几乎处处成立的支撑条件整理成逐路径成立的条件。令
+\[
+ G=\{X_0=1\}\cap\bigcap_{k\ge0}\{U(X_k,X_{k+1})>0\}.
+\]
+对固定 $k$，零转移事件是满足 $U(m,n)=0$ 的可数多个二坐标柱集的并；每个柱集由~\eqref{eq:chain-pair-law}~知概率为零。因此 $G$ 可测且概率为 $1$。具体地，对原概率空间中任意可测事件 $B$，有
+\[
+ \mathbb P(G)=1,\qquad \mathbb P(B\cap G)=\mathbb P(B).
+\]
+因而把概率空间限制到 $G$ 不需重新归一化。在这个空间上，\emph{每条}路径都满足
+\[
+ X_0=1,\qquad X_k<X_{k+1},\qquad X_k\mid X_{k+1}\quad(k\ge0).
+\]
+特别地，$X_{k+1}\ge2X_k$，从而 $X_k\ge2^k$，得到无限的严格递增整除链。这一辅助增长估计也保证任何有限截断内的访问次数有限。
+
+Prim 将核写在全部自然数上，原始 $U$ 的第 $0$ 行为零，并不归一化。构造概率核时，它人为把该行补为 $\delta_1$；从初始状态 $1$ 出发的支撑归纳保证永远不访问 $0$，故补行不影响上述正整数过程。随后源码使用路径测度及一个满测度子类型，使严格递增和整除性质对该子类型的每个样本成立。
+其导出的 Markov 接口是~\eqref{eq:chain-pair-law}~这一相邻二坐标恒等式；完整的无限路径分布来自实际的路径测度构造，不能仅凭该接口名称推断全部条件概率性质。
+
+至此完成的是无限随机环境链的构造。要从中选出对给定集合 $A$ 达到密度下界的确定性样本，仍须后续的访问恒等式、矩估计和极限论证。
+
+\subsection{访问概率与加权和}
+本小节证明随机链的访问质量等于不变权重，并将其截断和与 Erd\H{o}s 加权和比较。所有概率均取上一小节构造并限制到满测度集合后的概率空间。
+
+\paragraph{访问质量的有限递推。}
+为对应源码在自然数上的声明，补记 $\nu_\Lambda(0)=\nu_0(0)=0$；这不增加随机链的状态。定义
+\[
+ v(n)=\sum_{k\ge0}\mathbb P(X_k=n)\qquad(n\ge0).
+\]
+由 $X_0=1$ 及整数值的严格递增性，对所有样本有 $X_k\ge k+1$。所以 $X_k=n$ 只可能发生在 $k\le n-1$，每个固定状态的访问质量实际上是有限和。状态 $0$ 永不被访问，故 $v(0)=0$；状态 $1$ 仅在时刻 $0$ 被访问，故 $v(1)=1$。
+
+设 $n\ge2$。事件 $\{X_{k+1}=n\}$ 是下列有限个两两不交的可测事件之并：
+\[
+ \{X_k=m,\ X_{k+1}=n\},\qquad 1\le m<n.
+\]
+利用相邻二坐标恒等式~\eqref{eq:chain-pair-law}，不需要额外假设完整的条件 Markov 性，即得
+\[
+ \mathbb P(X_{k+1}=n)
+ =\sum_{m=1}^{n-1}\mathbb P(X_k=m)U(m,n).
+\]
+又因 $\mathbb P(X_0=n)=0$，对时间求和给出
+\begin{equation}\label{eq:visit-recursion}
+ v(n)=\sum_{k\ge0}\mathbb P(X_{k+1}=n)
+     =\sum_{m=1}^{n-1}v(m)U(m,n).
+\end{equation}
+这里换序可以完全在有限和中进行：对所有 $m<n$，$k\ge n-1$ 时 $\mathbb P(X_k=m)=0$，左端的相应项也为零。亦可使用非负级数的 Tonelli 定理，但无需预先假设任何无穷实数级数可和。
+
+\begin{proposition}[访问概率恒等式]\label{prop:visit-identity}
+对每个 $n\ge0$，有
+\begin{equation}\label{eq:visit-goal}
+ \boxed{\sum_{k\ge0}\mathbb P(X_k=n)=\nu_\Lambda(n).}
+\end{equation}
+\end{proposition}
+\begin{proof}
+对 $n$ 作强归纳。$n=0,1$ 的情形已由初始分布及严格递增性证明。若 $n\ge2$，假设等式对所有较小状态成立，则~\eqref{eq:visit-recursion}~和非对角伴随关系给出
+\begin{align*}
+ v(n)&=\sum_{m=1}^{n-1}\nu_\Lambda(m)U(m,n)\\
+ &=\nu_\Lambda(n)\sum_{m=1}^{n-1}P_\downarrow(n,m)
+ =\nu_\Lambda(n).
+\end{align*}
+最后一步利用下降核在 $n\ge2$ 时仅支持正真因子以及该行的归一化。这里绝不使用 $n=1$ 的吸收行来作非对角伴随转换。
+\end{proof}
+严格递增还说明同一状态至多访问一次，所以 $v(n)$ 也等于路径曾经到达 $n$ 的概率。证明同时使用了初始条件、二坐标概率公式和递增结构；单有权重的严格入流方程，尚不能识别实际过程的访问质量。
+
+\paragraph{从倒数 $\zeta$ 误差到逐点权重误差。}
+令 $h(s)=1/\zeta(s)$。先说明存在与 $u$ 无关的 $K\ge0$，使
+\begin{equation}\label{eq:zeta-global-quadratic}
+ |h(1+u)-u|\le Ku^2\qquad(u>0).
+\end{equation}
+关键是将 $\zeta(1+u)$ 的有界余项变成倒数的二阶余项。写
+$\zeta(1+u)=u^{-1}+R(u)$。只需存在 $B>0$、$\delta_0>0$，使 $|R(u)|\le B$ 对 $0<u\le\delta_0$ 成立。这个条件可以直接由前述积分比较得到：
+\[
+ u^{-1}\le\zeta(1+u)\le1+u^{-1},\qquad 0\le R(u)\le1.
+\]
+因此可取 $B=1$ 和任意固定 $\delta_0>0$。Prim 的对应声明则先用 $R(u)\to\gamma$（$\gamma$ 为 Euler 常数）取得局部有界性，再作以下同样的倒数估计；本文不需要重证这一更精确的端点极限。
+
+取 $0<\delta\le\min\{\delta_0,(2B)^{-1}\}$。当 $0<u\le\delta$ 时，
+\[
+ \zeta(1+u)\ge u^{-1}-B\ge(2u)^{-1},\qquad
+ |h(1+u)-u|
+ =\frac{u|R(u)|}{\zeta(1+u)}\le2Bu^2.
+\]
+当 $u>\delta$ 时，用 $0<h(1+u)\le1$ 得
+\[
+ |h(1+u)-u|\le1+u
+ \le(\delta^{-2}+\delta^{-1})u^2.
+\]
+故 $K=\max\{2B,\delta^{-2}+\delta^{-1}\}$ 满足~\eqref{eq:zeta-global-quadratic}。这里将局部估计延伸到整个正半轴，是随后对整个积分作统一控制所必需的步骤。
+
+固定 $n\ge2$，令 $L=\log n>0$。在权重积分中代换 $s=1+u$，得到
+\[
+ \nu_\Lambda(n)=\frac Ln\int_0^\infty e^{-Lu}h(1+u)\,du,
+ \qquad
+ \nu_0(n)=\frac Ln\int_0^\infty ue^{-Lu}\,du=\frac1{nL}.
+\]
+第一个积分由 $e^{-Lu}$ 控制，第二个是可积的指数矩。因此可以相减，得到准确的误差公式
+\begin{equation}\label{eq:weight-laplace-error}
+ \nu_\Lambda(n)-\nu_0(n)
+ =\frac Ln\int_0^\infty e^{-Lu}\bigl(h(1+u)-u\bigr)\,du.
+\end{equation}
+由~\eqref{eq:zeta-global-quadratic}，其绝对值至多为
+\[
+ \frac{KL}{n}\int_0^\infty u^2e^{-Lu}\,du
+ =\frac{KL}{n}\frac2{L^3}=\frac{2K}{nL^2}.
+\]
+所用指数矩可由 $t=Lu$ 及两次分部积分计算：$\int_0^\infty te^{-t}\,dt=1$、$\int_0^\infty t^2e^{-t}\,dt=2$；边界项为零，指数衰减也保证可积性。于是得到绝对常数 $C=2K$ 满足
+\begin{equation}\label{eq:weight-pointwise-error}
+ \boxed{\left|\nu_\Lambda(n)-\frac1{n\log n}\right|
+ \le\frac{C}{n(\log n)^2}\qquad(n\ge2).}
+\end{equation}
+常数对全部整数 $n\ge2$ 一致，并非仅对依赖于 $n$ 的局部积分有效。
+
+\paragraph{绝对可求和误差与密度不变性。}
+函数 $1/[t(\log t)^2]$ 在 $t\ge2$ 上正且递减，而
+\[
+ \int_2^\infty\frac{dt}{t(\log t)^2}=\frac1{\log2}<\infty.
+\]
+积分判别法和~\eqref{eq:weight-pointwise-error}~因而给出
+\begin{equation}\label{eq:weight-summable-error}
+ D:=\sum_{n\ge1}|\nu_\Lambda(n)-\nu_0(n)|
+ \le1+C\sum_{n\ge2}\frac1{n(\log n)^2}<\infty.
+\end{equation}
+右侧的 $1$ 是 $n=1$ 处的差；$n=0$ 的补充值不产生误差。Prim 在这里使用 Cauchy 凝聚判别法，将控制级数变成 $1/[k^2(\log2)^2]$ 的求和；与正文的积分判别法证明的是同一收敛结论。
+
+对任意 $A\subseteq\N_{>0}$ 和实数 $x$，记
+$V_A^{\le}(x)=\sum_{n\in A,\,n\le x}\nu_\Lambda(n)$。三角不等式给出
+\begin{equation}\label{eq:weight-uniform-truncation}
+ \left|V_A^{\le}(x)-W_A^{\le}(x)\right|
+ \le\sum_{\substack{n\in A\\n\le x}}|\nu_\Lambda(n)-\nu_0(n)|\le D.
+\end{equation}
+这里 $D$ 同时独立于 $A$ 和 $x$。对 $x>e$ 除以正数 $\log\log x$，差的绝对值不超过 $D/\log\log x\to0$。所以
+\begin{equation}\label{eq:mangoldt-density-equality}
+ \limsu\frac{V_A^{\le}(x)}{\log\log x}
+ =\limsu\frac{W_A^{\le}(x)}{\log\log x}=\Delta(A).
+\end{equation}
+例如可对任意 $\varepsilon>0$，在充分大处用两个归一化量相差至多 $\varepsilon$ 作双向比较，再令 $\varepsilon\downarrow0$。
+为与 Prim 的实数值上极限一致，还可核对这里不存在无界歧义：正递减函数 $1/(t\log t)$ 的积分比较给出
+$W_A^{\le}(x)\le\log\log x+O(1)$；结合非负性和~\eqref{eq:weight-uniform-truncation}，两个归一化量最终都有界。
+
+\paragraph{截断访问次数的一阶矩。}
+定义可测随机变量
+\[
+ Z_A(x)=\sum_{k\ge0}\mathbf1_{\{X_k\in A,\ X_k\le x\}}.
+\]
+$x<1$ 时它恒为零；若 $x\ge1$，令 $N=\lfloor x\rfloor$，由 $X_k\ge k+1$ 知 $k\ge N$ 时所有指示函数恒为零。因此它是至多 $N$ 项可测指示函数之和，满足 $0\le Z_A(x)\le N$，在概率空间上可积。先对时间的有限和取期望，再将每个事件按有限多个状态拆分，得到
+\begin{align*}
+ \mathbb E Z_A(x)
+ &=\sum_{k=0}^{N-1}\mathbb P(X_k\in A,\ X_k\le x)\\
+ &=\sum_{\substack{n\in A\\n\le x}}\sum_{k=0}^{N-1}\mathbb P(X_k=n)
+ =\sum_{\substack{n\in A\\n\le x}}\nu_\Lambda(n).
+\end{align*}
+最后一步用命题~\ref{prop:visit-identity}，因为 $n\le N$ 时所有更晚的访问概率均为零。由此及~\eqref{eq:weight-uniform-truncation}，
+\begin{equation}\label{eq:first-moment-weight}
+ \boxed{\begin{gathered}
+ \mathbb E Z_A(x)=V_A^{\le}(x)=W_A^{\le}(x)+O(1),\\
+ \limsu\frac{\mathbb E Z_A(x)}{\log\log x}=\Delta(A).
+ \end{gathered}}
+\end{equation}
+$O(1)$ 可统一取为 $D$。这完成了从随机过程到数论加权密度的一阶矩联系，尚未交换期望与路径上极限；确定性高密度路径的提取仍需后续论证。
+
+\subsection{二阶矩与质因子数加权估计}
+上一小节确定了一阶矩；本小节证明归一化访问次数在二阶矩意义下一致有界。关键是整除链对访问时间的算术限制，而不是不同时刻访问事件的独立性。
+
+\paragraph{从两次访问到带时间权重的一次访问。}
+固定 $x\ge1$，令 $N=\lfloor x\rfloor$，并记
+$E_k(x)=\{X_k\in A,\ X_k\le x\}$。坐标可测且状态空间离散，故这些事件及它们的交均可测。由 $X_k\ge k+1$，$k\ge N$ 时 $E_k(x)=\varnothing$，于是
+\[
+ \mathbb E[Z_A(x)^2]
+ =\sum_{0\le i,j<N}\mathbb P(E_i(x)\cap E_j(x)).
+\]
+这是有限指示函数之和的平方及其积分，所有换序均在有限和中进行。把有序对分成 $i\le j$ 和 $j\le i$ 两部分，允许对角线被重复计入，利用交事件包含于任一事件，得到
+\begin{equation}\label{eq:pair-index-bound}
+ \begin{split}
+ \mathbb E[Z_A(x)^2]
+ &\le\sum_{j<N}\sum_{i\le j}\mathbb P(E_j(x))
+    +\sum_{i<N}\sum_{j\le i}\mathbb P(E_i(x))\\
+ &=2\sum_{j<N}(j+1)\mathbb P(E_j(x)).
+ \end{split}
+\end{equation}
+这只使用非负性和事件包含关系，没有把交事件概率写成概率的乘积。
+
+\paragraph{严格整除限制访问时间。}
+对正整数定义带重数的素因子个数
+\[
+ \Omega(n)=\sum_p v_p(n),\qquad\Omega(1)=0.
+\]
+它对应 mathlib 的 $\texttt{ArithmeticFunction.cardFactors}$，即素因子列表的长度；不同于只数不同素因子的函数。对正整数 $a,c$，素因子分解给出
+$\Omega(ac)=\Omega(a)+\Omega(c)$。若 $a\mid b$ 且 $a<b$，写 $b=ac$，则 $c\ge2$，所以 $\Omega(b)\ge\Omega(a)+1$。沿路径从 $X_0=1$ 归纳，得到
+\begin{equation}\label{eq:index-omega}
+ j\le\Omega(X_j),\qquad
+ X_j=n\ \Longrightarrow\ j+1\le\Omega(n)+1.
+\end{equation}
+这包括 $n=1$：只能有 $j=0$，两侧均为 $1$。
+按终点状态拆分每个 $E_j(x)$，以~\eqref{eq:index-omega}~控制非空纤维，再使用访问概率恒等式，有
+\begin{align*}
+ \sum_{j<N}(j+1)\mathbb P(E_j(x))
+ &=\sum_{\substack{n\in A\\1\le n\le x}}\sum_{j<N}(j+1)\mathbb P(X_j=n)\\
+ &\le\sum_{\substack{n\in A\\1\le n\le x}}(\Omega(n)+1)
+     \sum_{j<N}\mathbb P(X_j=n)\\
+ &=\sum_{\substack{n\in A\\1\le n\le x}}(\Omega(n)+1)\nu_\Lambda(n).
+\end{align*}
+若 $j>\Omega(n)$，该纤维为空，不需要对不可能的访问另加假设。故
+\begin{equation}\label{eq:moment-terminal-bound}
+ \boxed{\mathbb E[Z_A(x)^2]
+ \le2\sum_{\substack{n\in A\\1\le n\le x}}(\Omega(n)+1)\nu_\Lambda(n).}
+\end{equation}
+$x<1$ 时两边均为零。
+
+\paragraph{适用于算术加权和的逐点支配。}
+由~\eqref{eq:weight-pointwise-error}~及 $\log n\ge\log2$，对 $n\ge2$ 有
+\begin{equation}\label{eq:weight-multiplicative-domination}
+ 0<\nu_\Lambda(n)\le\nu_0(n)
+       +\frac{C}{n(\log n)^2}
+ \le M\nu_0(n),\qquad M=1+\frac C{\log2}.
+\end{equation}
+这是可以乘以任意非负系数的逐点支配。单凭无权误差的绝对可和性，不能断言乘上无界的 $\Omega(n)$ 后误差仍可和；本节不作这种推断。$n=1$ 处单独贡献至多
+$(\Omega(1)+1)\nu_\Lambda(1)=1$。令
+\[
+ T(N)=\sum_{n=2}^N\frac{\Omega(n)+1}{n\log n},\qquad
+ H(N)=\sum_{n=2}^N\frac1{n\log n},\qquad
+ P(N)=\sum_{\substack{p\le N\\p\text{ 为素数}}}\frac1p.
+\]
+去掉对集合 $A$ 的限制只增加非负项，因此
+\begin{equation}\label{eq:mangoldt-terminal-comparison}
+ \sum_{\substack{n\in A\\1\le n\le x}}(\Omega(n)+1)\nu_\Lambda(n)
+ \le1+M T(\lfloor x\rfloor)\qquad(x\ge2).
+\end{equation}
+
+\paragraph{素数幂展开与乘积估计。}
+素因子分解的准确计数公式为
+\begin{equation}\label{eq:omega-prime-power-count}
+ \Omega(n)=\sum_p\sum_{r\ge1}\mathbf1_{\{p^r\mid n\}}
+ \qquad(n\ge1).
+\end{equation}
+对每个固定 $n$，只有有限项非零。对 $n\ge2$，还有 $\Omega(n)+1\le2\Omega(n)$。固定 $q\ge2$，把其倍数写成 $n=qm$。当 $m\ge2$ 时，
+\[
+ \nu_0(qm)=\frac1{qm\log(qm)}\le\frac1q\nu_0(m);
+\]
+当 $m=1$ 时，必须另用 $\nu_0(q)\le1/(q\log2)$，不能用 $\nu_0(1)=0$ 作为上界。因此
+\begin{equation}\label{eq:erdos-multiples-bound}
+ \sum_{\substack{2\le n\le N\\q\mid n}}\nu_0(n)
+ \le\frac1q\left(\frac1{\log2}+H(N)\right).
+\end{equation}
+若 $q>N$，左侧为空；该不等式仍成立。交换~\eqref{eq:omega-prime-power-count}~所产生的有限求和，并将非负的素数幂倒数和扩大到全体正指数，得到
+\begin{align*}
+ T(N)&\le2\sum_{\substack{p^r\le N\\p\text{ 为素数},\ r\ge1}}
+              \sum_{\substack{2\le n\le N\\p^r\mid n}}\nu_0(n)\\
+ &\le2\left(\frac1{\log2}+H(N)\right)
+        \sum_{p\le N}\sum_{r\ge1}p^{-r}\\
+ &=2\left(\frac1{\log2}+H(N)\right)\sum_{p\le N}\frac1{p-1}.
+\end{align*}
+此处及以下以 $p$ 为指标的和均只对素数取值。由 $1/(p-1)\le2/p$，得到与 Prim 相同的乘积型上界
+\begin{equation}\label{eq:omega-erdos-product}
+ \boxed{T(N)\le4\left(\frac1{\log2}+H(N)\right)P(N).}
+\end{equation}
+几何级数的公比 $1/p<1$，所以延伸指数求和合法；其余换序都是有限换序。源码把指数先截在 $1\le r\le N$，再用几何级数上界，数学作用相同。
+
+\paragraph{两个双对数因子的来源。}
+式~\eqref{eq:omega-erdos-product}~说明，下述数论估计只承担一个明确任务：分别控制 $H(N)$ 与 $P(N)$，使带 $\Omega$ 的终端和为 $O((\log\log N)^2)$，从而接回二阶矩界。Chebyshev 估计用于证明这里需要的 Mertens 输入；不需要素数定理，也不引入访问事件的独立性假设。
+首先，递减函数 $1/(t\log t)$ 的积分比较给出某个绝对常数 $B\ge0$，使
+\begin{equation}\label{eq:erdos-terminal-loglog}
+ H(N)\le B+\log\log N\qquad(N\ge2).
+\end{equation}
+例如取 $B=1/(2\log2)+|\log\log2|$ 即可。源码通过相邻对数增量及第二章已出现的双对数主项估计得到同一上界。
+
+其次，需要素数倒数和的 Mertens 估计
+\begin{equation}\label{eq:prime-reciprocal-loglog}
+ |P(t)-\log\log t|\le B_p\qquad(t\ge2),
+\end{equation}
+其中 $P(t)=\sum_{p\le t}1/p$，$B_p\ge0$ 是绝对常数。以下说明这一输入的来源，避免把它当作素数定理的直接推论。
+记 $Q(t)=\sum_{2\le q\le t}\Lambda(q)/q$、$\psi(t)=\sum_{q\le t}\Lambda(q)=\sum_{p^r\le t}\log p$，后一个和遍历素数 $p$ 与整数 $r\ge1$。
+对整数 $N\ge1$，交换有限因子和得到
+\[
+ \log(N!)=\sum_{q\le N}\Lambda(q)\lfloor N/q\rfloor,
+ \qquad 0\le NQ(N)-\log(N!)\le\psi(N).
+\]
+这里使用的是~\eqref{eq:mangoldt-divisors}，以及 $0\le N/q-\lfloor N/q\rfloor<1$。
+Chebyshev 型界 $\psi(N)\le c_\psi N$ 可由二项式系数初等证明。素数 $p$ 在二项式系数中的估值为
+\[
+ v_p\binom{2m}{m}=\sum_{r\ge1}
+ \left(\lfloor2m/p^r\rfloor-2\lfloor m/p^r\rfloor\right),
+\]
+每项为 $0$ 或 $1$。特别地，若 $m<p^r\le2m$，则 $\lfloor2m/p^r\rfloor=1$ 而 $\lfloor m/p^r\rfloor=0$，对应估值项恰为 $1$。区间 $(m,2m]$ 中每个素数幂 $p^r$ 在
+$\log\binom{2m}{m}$ 的素因子估值展开中贡献一项 $\log p$，其他估值项非负，故
+\[
+ \psi(2m)-\psi(m)\le\log\binom{2m}{m}\le2m\log2.
+\]
+沿二的幂望远镜求和，再把一般 $N$ 向上放大到小于 $2N$ 的二的幂，可取 $c_\psi=4\log2$（$N=1$ 单独显然）。另一方面，积分比较给出
+$N\log N-N+1\le\log(N!)\le N\log N$。
+因此 $Q(N)=\log N+O(1)$。对实数 $t\ge2$，取 $N=\lfloor t\rfloor$，有 $Q(t)=Q(N)$ 且 $0\le\log t-\log N\le\log2$，所以仍有
+$Q(t)=\log t+O(1)$，误差绝对值由同一绝对常数控制。
+
+对有限阶梯函数 $Q$ 作分部求和，得到
+\[
+ S(t):=\sum_{2\le q\le t}\frac{\Lambda(q)}{q\log q}
+ =\frac{Q(t)}{\log t}+\int_2^t\frac{Q(u)}{u(\log u)^2}\,du.
+\]
+下端使用 $Q(2^-)=0$，故没有遗漏 $q=2$ 的原子。代入 $Q(u)=\log u+O(1)$，主积分为
+$\log\log t-\log\log2$；误差积分由
+$\int_2^\infty du/[u(\log u)^2]<\infty$ 控制，端点误差也有界。故 $S(t)=\log\log t+O(1)$。
+由于 $\Lambda$ 仅在素数幂处非零，
+\[
+ 0\le S(t)-P(t)
+ =\sum_{\substack{p^r\le t\\r\ge2}}\frac1{r p^r}
+ \le\sum_p\sum_{r\ge2}p^{-r}
+ =\sum_p\frac1{p(p-1)}
+ \le\sum_{m=2}^\infty\frac1{m(m-1)}=1.
+\]
+这就证明~\eqref{eq:prime-reciprocal-loglog}。Prim 的实际路线同样先证明 $Q(t)$ 的有界误差，再作离散分部求和，最后比较 $S(t)$ 与 $P(t)$；其中使用 mathlib 的 Chebyshev 界及非素数部分的可和性。上面的二项式系数论证和几何级数比较说明了这些标准输入在本处承担的数学内容。
+
+\paragraph{合成并归一化。}
+取 $x\ge x_0:=e^e$，令 $N=\lfloor x\rfloor\ge2$、$L=\log\log x\ge1$。
+由双对数的单调性，~\eqref{eq:erdos-terminal-loglog}~与~\eqref{eq:prime-reciprocal-loglog}~给出
+\[
+ \frac1{\log2}+H(N)\le B_0+L\le(B_0+1)L,
+ \qquad P(N)\le B_p+L\le(B_p+1)L,
+ \quad B_0=\frac1{\log2}+B.
+\]
+因此令 $K_E=4(B_0+1)(B_p+1)$，由~\eqref{eq:omega-erdos-product}~得到 $T(N)\le K_E L^2$。再用~\eqref{eq:mangoldt-terminal-comparison}~及 $1\le L^2$，即得
+\[
+ \sum_{\substack{n\in A\\1\le n\le x}}(\Omega(n)+1)\nu_\Lambda(n)
+ \le(1+MK_E)L^2.
+\]
+结合~\eqref{eq:moment-terminal-bound}，最终有
+\begin{equation}\label{eq:moment-goals}
+ \boxed{\mathbb E[Z_A(x)^2]\le C_* (\log\log x)^2
+ \quad(x\ge e^e),\qquad C_*=2(1+MK_E)>0.}
+\end{equation}
+这些常数均来自全体整数或素数的估计，可以统一选取而不依赖 $A$；故当然也满足允许常数依赖 $A$ 的陈述。Prim 导出接口按 $A$ 给出存在常数及最终成立的范围，其证明中上述常数实际在选取 $A$ 之前已经确定。
+令 $Y_x=Z_A(x)/\log\log x$，于是
+\[
+ \sup_{x\ge e^e}\mathbb E[Y_x^2]\le C_*.
+\]
+至此得到二阶矩的一致控制；下一小节据此证明统一可积性，并通过反向 Fatou 提取同一条高密度确定性路径。
+
+\subsection{统一可积性、反向 Fatou 与确定性路径}
+固定 $A\subseteq\N_{>0}$，设 $d=\Delta(A)>0$。由上一小节及式~\eqref{eq:first-moment-weight}，对 $x\ge e^e$ 定义
+\[
+ Y_x=\frac{Z_A(x)}{\log\log x},\qquad g(x)=\mathbb E Y_x,
+\]
+则 $Y_x$ 是非负可积随机变量，且
+\begin{equation}\label{eq:fatou-moment-inputs}
+ \limsu g(x)=d,\qquad
+ \sup_{x\ge e^e}\mathbb E[Y_x^2]\le C_*.
+\end{equation}
+这里 $d$ 是有限实数：由 $0\le W_A^{\le}(x)\le\log\log x+O(1)$ 可知 $0\le d\le1$。全过程均在第~3.2~小节构造的同一个概率空间上进行，该空间的每个样本已经是一条无限严格整除链。
+
+\paragraph{选择实现期望上极限的尺度。}
+由实数上极限的定义，对每个整数 $j\ge0$，$g(x)\le d+1/(j+1)$ 在充分大处成立，而 $g(x)>d-1/(j+1)$ 在任意大的尺度仍能成立。因此可以递归选取
+\begin{equation}\label{eq:fatou-scale-sequence}
+ x_j\ge\max\{e^e,j+1\},\qquad x_{j+1}>x_j+1,
+ \qquad |g(x_j)-d|\le\frac1{j+1}.
+\end{equation}
+选择每个 $x_j$ 时同时超过相应上界的最终成立阈值即可。这给出 $x_j\to\infty$ 和 $\mathbb E Y_{x_j}\to d$；不要求 $g$ 连续，也不要求对 $x$ 有联合可测性。以下记 $Y_j=Y_{x_j}$。每个 $Y_j$ 可测，且 $\mathbb E[Y_j^2]\le C_*$ 对所有 $j$ 成立。
+
+\paragraph{二阶矩给出的统一可积性。}
+对任意 $M>0$，逐点有
+\[
+ 0\le Y_x\mathbf1_{\{Y_x>M\}}\le\frac{Y_x^2}{M}.
+\]
+对概率空间积分并取上确界，得到
+\begin{equation}\label{eq:uniform-integrable-tail}
+ \sup_{x\ge e^e}\mathbb E\bigl[Y_x\mathbf1_{\{Y_x>M\}}\bigr]
+ \le\frac{C_*}{M}\longrightarrow0\qquad(M\to\infty).
+\end{equation}
+这就是该非负可积随机变量族的统一可积性，特别也适用于子族 $(Y_j)$。此处控制的是积分尾部，不是断言存在一个同时逐点支配所有 $Y_j$ 的可积随机变量。
+
+\paragraph{有界截断上的反向 Fatou。}
+定义扩展非负实值函数
+\[
+ F(\omega)=\limsup_{j\to\infty}Y_j(\omega)
+ =\inf_{r\ge0}\sup_{j\ge r}Y_j(\omega)\in[0,\infty].
+\]
+可数上确界和下确界保持可测性，故 $F$ 可测。允许 $F=+\infty$，其期望按非负 Lebesgue 积分理解。
+固定有限的 $M>0$，令 $Y_j^{(M)}=\min\{Y_j,M\}$。这些变量可测且被可积常数 $M$ 支配。对非负变量 $M-Y_j^{(M)}$ 应用通常的 Fatou 引理，得到
+\[
+ \mathbb E\bigl[\liminf_j(M-Y_j^{(M)})\bigr]
+ \le\liminf_j\mathbb E[M-Y_j^{(M)}].
+\]
+两侧均有限，且概率空间的总质量为 $1$，因此可从 $M$ 中相减，得到有界截断的反向 Fatou 不等式
+\begin{equation}\label{eq:truncated-reverse-fatou}
+ \mathbb E\bigl[\limsup_jY_j^{(M)}\bigr]
+ \ge\limsup_j\mathbb E[Y_j^{(M)}].
+\end{equation}
+另一方面，$0\le Y_j-Y_j^{(M)}\le Y_j\mathbf1_{\{Y_j>M\}}$，由~\eqref{eq:uniform-integrable-tail}~知
+\[
+ 0\le\mathbb E Y_j-\mathbb E Y_j^{(M)}\le\frac{C_*}{M}.
+\]
+故 $\limsup_j\mathbb E Y_j^{(M)}\ge d-C_*/M$。
+
+对任意非负数列（允许上极限无穷），截断与上极限满足
+\begin{equation}\label{eq:truncation-limsup-commute}
+ \limsup_j\min\{Y_j(\omega),M\}=\min\{F(\omega),M\}.
+\end{equation}
+可先将 $\min(\cdot,M)$ 与每个尾部的上确界交换，再令尾部上确界单调下降；有限高度截断保持这一极限。若 $F(\omega)=\infty$，所有尾部上确界都为无穷，等式两端均为 $M$。
+由以上各式，
+\[
+ \mathbb E\min\{F,M\}\ge d-\frac{C_*}{M}.
+\]
+现在仅沿正整数高度 $M\to\infty$ 取极限。由于 $\min\{F,M\}\uparrow F$，单调收敛定理给出
+\begin{equation}\label{eq:fatou-extended-expectation}
+ \boxed{\mathbb E F
+ =\lim_{M\to\infty}\mathbb E\min\{F,M\}
+ \ge d=\Delta(A).}
+\end{equation}
+这里从未作 $\infty-\infty$ 运算，也不需要假设 $F$ 有限或可积。统一二阶矩控制的是各个 $Y_j$，本论证不将其误用为 $F$ 可积的结论。
+
+Prim 的对应证明同样截断，但采用 $Y_j\le\min(Y_j,R)+Y_j^2/R$ 直接估计积分余项，并对可测代表调用有界支配下的反向 Fatou；随后用 $C_*/R\to0$ 和扩展非负实数的序关系去掉误差。正文则显式写出统一可积性、式~\eqref{eq:truncation-limsup-commute}~和单调收敛。这些步骤承担相同的数学职责，并非源码的逐行翻译。
+
+\paragraph{选出达到下界的一个样本。}
+由~\eqref{eq:fatou-extended-expectation}~可以得到某个 $\omega_0$ 满足 $F(\omega_0)\ge d$，但需要说明为什么下界是 $d$ 本身而不只是任意 $d-\varepsilon$。
+反设所有样本均有 $F(\omega)<d$。此时 $F$ 处处有限且被常数 $d$ 支配，令 $D(\omega)=d-F(\omega)>0$。可测集合
+\[
+ B_r=\{\omega:D(\omega)\ge1/r\},\qquad r\ge1,
+\]
+的并为整个概率空间。由于其总概率为 $1$，至少一个 $B_r$ 的概率严格为正。于是
+\[
+ \mathbb E D\ge\frac{\mathbb P(B_r)}r>0,
+ \qquad \mathbb E F=d-\mathbb E D<d,
+\]
+与~\eqref{eq:fatou-extended-expectation}~矛盾。故所需样本存在。这个反证也覆盖 $\mathbb E F=\infty$ 的可能性，因为反设本身会迫使该期望有限。
+
+固定此 $\omega_0$，令 $m_i=X_i(\omega_0)$。同一个样本的所有坐标共同定义一条从 $1$ 出发的无限严格递增整除链。对任意充分大的 $T$，因 $x_j\to\infty$，所有充分大的 $j$ 均满足 $x_j\ge T$，从而
+\[
+ \sup_{x\ge T}Y_x(\omega_0)
+ \ge\limsup_jY_{x_j}(\omega_0)=F(\omega_0).
+\]
+再令 $T\to\infty$，得到扩展非负实数意义下的结论
+\begin{equation}\label{eq:ambient-hits}
+ \boxed{\limsu\frac{\#\{i\ge0:m_i\in A,\ m_i\le x\}}{\log\log x}
+ \ge\Delta(A).}
+\end{equation}
+这里只对可数尺度序列的上极限取积分；全体实数尺度的比较是固定样本后的数值不等式，无需声称不可数上确界作为随机变量可测。
+样本 $\omega_0$ 可以依赖于集合 $A$，但不再随截断尺度改变。因此所得是同一条无限环境链，而不是对每个尺度分别挑选不同的有限链。若某条路径的上极限为无穷，它同样满足所需下界。下一小节从这条固定环境链中提取属于 $A$ 的无限子链。
 
 \subsection{从访问指标抽取子链}
 \begin{lemma}[集合内子链提取]\label{lem:extract}
-若 $\Delta(A)>0$，且严格递增的环境整除链 $(m_i)$ 满足~\eqref{eq:ambient-hits}，则它包含满足~\eqref{eq:upstream-bound}~的集合内无限子链。
+若 $\Delta(A)>0$，且严格递增的正整数环境整除链 $(m_i)_{i\ge0}$ 满足~\eqref{eq:ambient-hits}，则它包含满足~\eqref{eq:upstream-bound}~的集合内无限子链。
 \end{lemma}
 \begin{proof}
 设 $I=\{i\ge0:m_i\in A\}$。若 $I$ 有限，则访问次数至多为 $\#I$，除以趋于无穷的 $\log\log x$ 后极限为零，与~\eqref{eq:ambient-hits}~矛盾。故可将 $I$ 递增枚举为 $i_0<i_1<\cdots$，并令 $b_j=m_{i_j}$。
@@ -52,4 +588,4 @@
 因而所需的上极限下界原样保留。
 \end{proof}
 
-这样，已有整除链定理的证明职责被分解为：先证明概率方法给出的~\eqref{eq:ambient-hits}，再应用引理~\ref{lem:extract}。本稿当前对前者作有明确来源的引用，对后者给出完整推导；尚不把这一阶段描述为对上游全部证明的逐项复现。
+这样，已有整除链定理的证明职责被分解为：先证明概率方法给出的~\eqref{eq:ambient-hits}，再应用引理~\ref{lem:extract}。本章已将随机链构造、访问与矩估计、确定性路径选择和子链提取连接起来，从而得到定理~\ref{thm:upstream}~的数学证明。正文与固定源码在若干分析步骤采用不同的表述；这一数学阐释不等同于重新运行 Lean 验证。
