@@ -80,6 +80,8 @@ $\nu_0(n)=1/(n\log n)$（$n\ge2$）；为统一求和可令 $\nu_0(1)=0$。两�
 边界项均为零；左侧由 $h'$ 控制，右侧被积函数由 $n^{-s}$ 控制，所以此极限步骤合法。
 \end{proof}
 
+本文所称的不变权重，是相对于严格下降整除转移的入流平衡权重，而不是包含状态 $1$ 吸收自环的平稳概率分布。
+
 上述推导对应 Prim 的不变递推声明。正文采用非负积分的 Tonelli 论证；源码则先建立绝对可积求和的桥接等式，再调用倒数 $\zeta$ 的端点评估。两者的数学职责相同，但不能据此声称正文的每个中间不等式都已有同名 Lean 声明。
 
 \subsection{从下降整除链构造向上转移核}
@@ -142,7 +144,11 @@ $n=1$ 的行和则由吸收自环给出。因而它是一个下降 Markov 核，
 \[
  G=\{X_0=1\}\cap\bigcap_{k\ge0}\{U(X_k,X_{k+1})>0\}.
 \]
-对固定 $k$，零转移事件是满足 $U(m,n)=0$ 的可数多个二坐标柱集的并；每个柱集由~\eqref{eq:chain-pair-law}~知概率为零。因此 $G$ 可测且概率为 $1$。把概率空间限制到 $G$ 不改变任何概率，也不需重新归一化。在这个空间上，\emph{每条}路径都满足
+对固定 $k$，零转移事件是满足 $U(m,n)=0$ 的可数多个二坐标柱集的并；每个柱集由~\eqref{eq:chain-pair-law}~知概率为零。因此 $G$ 可测且概率为 $1$。具体地，对原概率空间中任意可测事件 $B$，有
+\[
+ \mathbb P(G)=1,\qquad \mathbb P(B\cap G)=\mathbb P(B).
+\]
+因而把概率空间限制到 $G$ 不需重新归一化。在这个空间上，\emph{每条}路径都满足
 \[
  X_0=1,\qquad X_k<X_{k+1},\qquad X_k\mid X_{k+1}\quad(k\ge0).
 \]
@@ -153,20 +159,149 @@ Prim 将核写在全部自然数上，原始 $U$ 的第 $0$ 行为零，并不�
 
 至此完成的是无限随机环境链的构造。要从中选出对给定集合 $A$ 达到密度下界的确定性样本，仍须后续的访问恒等式、矩估计和极限论证。
 
-\subsection{访问概率与加权和：待展开}
-下一步需要证明
-\begin{equation}\label{eq:visit-goal}
- \sum_{i\ge0}\mathbb P(X_i=n)=\nu_\Lambda(n),
- \qquad
- \sum_{\substack{n\in A\\n\le x}}\nu_\Lambda(n)=W_A^{\le}(x)+O(1).
-\end{equation}
-这里权重比较的误差为何一致有界尚待展开，不能仅由本节已证的 $\nu_\Lambda(n)\le1/n$ 推出。
+\subsection{访问概率与加权和}
+本小节证明随机链的访问质量等于不变权重，并将其截断和与 Erd\H{o}s 加权和比较。所有概率均取上一小节构造并限制到满测度集合后的概率空间。
 
-\subsection{一阶矩和二阶矩：待展开}
-记 $Z_A(x)=\#\{i\ge0:X_i\in A,\ X_i\le x\}$。后续需要论证
+\paragraph{访问质量的有限递推。}
+为对应源码在自然数上的声明，补记 $\nu_\Lambda(0)=\nu_0(0)=0$；这不增加随机链的状态。定义
+\[
+ v(n)=\sum_{k\ge0}\mathbb P(X_k=n)\qquad(n\ge0).
+\]
+由 $X_0=1$ 及整数值的严格递增性，对所有样本有 $X_k\ge k+1$。所以 $X_k=n$ 只可能发生在 $k\le n-1$，每个固定状态的访问质量实际上是有限和。状态 $0$ 永不被访问，故 $v(0)=0$；状态 $1$ 仅在时刻 $0$ 被访问，故 $v(1)=1$。
+
+设 $n\ge2$。事件 $\{X_{k+1}=n\}$ 是下列有限个两两不交的可测事件之并：
+\[
+ \{X_k=m,\ X_{k+1}=n\},\qquad 1\le m<n.
+\]
+利用相邻二坐标恒等式~\eqref{eq:chain-pair-law}，不需要额外假设完整的条件 Markov 性，即得
+\[
+ \mathbb P(X_{k+1}=n)
+ =\sum_{m=1}^{n-1}\mathbb P(X_k=m)U(m,n).
+\]
+又因 $\mathbb P(X_0=n)=0$，对时间求和给出
+\begin{equation}\label{eq:visit-recursion}
+ v(n)=\sum_{k\ge0}\mathbb P(X_{k+1}=n)
+     =\sum_{m=1}^{n-1}v(m)U(m,n).
+\end{equation}
+这里换序可以完全在有限和中进行：对所有 $m<n$，$k\ge n-1$ 时 $\mathbb P(X_k=m)=0$，左端的相应项也为零。亦可使用非负级数的 Tonelli 定理，但无需预先假设任何无穷实数级数可和。
+
+\begin{proposition}[访问概率恒等式]\label{prop:visit-identity}
+对每个 $n\ge0$，有
+\begin{equation}\label{eq:visit-goal}
+ \boxed{\sum_{k\ge0}\mathbb P(X_k=n)=\nu_\Lambda(n).}
+\end{equation}
+\end{proposition}
+\begin{proof}
+对 $n$ 作强归纳。$n=0,1$ 的情形已由初始分布及严格递增性证明。若 $n\ge2$，假设等式对所有较小状态成立，则~\eqref{eq:visit-recursion}~和非对角伴随关系给出
+\begin{align*}
+ v(n)&=\sum_{m=1}^{n-1}\nu_\Lambda(m)U(m,n)\\
+ &=\nu_\Lambda(n)\sum_{m=1}^{n-1}P_\downarrow(n,m)
+ =\nu_\Lambda(n).
+\end{align*}
+最后一步利用下降核在 $n\ge2$ 时仅支持正真因子以及该行的归一化。这里绝不使用 $n=1$ 的吸收行来作非对角伴随转换。
+\end{proof}
+严格递增还说明同一状态至多访问一次，所以 $v(n)$ 也等于路径曾经到达 $n$ 的概率。证明同时使用了初始条件、二坐标概率公式和递增结构；单有权重的严格入流方程，尚不能识别实际过程的访问质量。
+
+\paragraph{从倒数 $\zeta$ 误差到逐点权重误差。}
+令 $h(s)=1/\zeta(s)$。先说明存在与 $u$ 无关的 $K\ge0$，使
+\begin{equation}\label{eq:zeta-global-quadratic}
+ |h(1+u)-u|\le Ku^2\qquad(u>0).
+\end{equation}
+关键是将 $\zeta(1+u)$ 的有界余项变成倒数的二阶余项。写
+$\zeta(1+u)=u^{-1}+R(u)$。只需存在 $B>0$、$\delta_0>0$，使 $|R(u)|\le B$ 对 $0<u\le\delta_0$ 成立。这个条件可以直接由前述积分比较得到：
+\[
+ u^{-1}\le\zeta(1+u)\le1+u^{-1},\qquad 0\le R(u)\le1.
+\]
+因此可取 $B=1$ 和任意固定 $\delta_0>0$。Prim 的对应声明则先用 $R(u)\to\gamma$（$\gamma$ 为 Euler 常数）取得局部有界性，再作以下同样的倒数估计；本文不需要重证这一更精确的端点极限。
+
+取 $0<\delta\le\min\{\delta_0,(2B)^{-1}\}$。当 $0<u\le\delta$ 时，
+\[
+ \zeta(1+u)\ge u^{-1}-B\ge(2u)^{-1},\qquad
+ |h(1+u)-u|
+ =\frac{u|R(u)|}{\zeta(1+u)}\le2Bu^2.
+\]
+当 $u>\delta$ 时，用 $0<h(1+u)\le1$ 得
+\[
+ |h(1+u)-u|\le1+u
+ \le(\delta^{-2}+\delta^{-1})u^2.
+\]
+故 $K=\max\{2B,\delta^{-2}+\delta^{-1}\}$ 满足~\eqref{eq:zeta-global-quadratic}。这里将局部估计延伸到整个正半轴，是随后对整个积分作统一控制所必需的步骤。
+
+固定 $n\ge2$，令 $L=\log n>0$。在权重积分中代换 $s=1+u$，得到
+\[
+ \nu_\Lambda(n)=\frac Ln\int_0^\infty e^{-Lu}h(1+u)\,du,
+ \qquad
+ \nu_0(n)=\frac Ln\int_0^\infty ue^{-Lu}\,du=\frac1{nL}.
+\]
+第一个积分由 $e^{-Lu}$ 控制，第二个是可积的指数矩。因此可以相减，得到准确的误差公式
+\begin{equation}\label{eq:weight-laplace-error}
+ \nu_\Lambda(n)-\nu_0(n)
+ =\frac Ln\int_0^\infty e^{-Lu}\bigl(h(1+u)-u\bigr)\,du.
+\end{equation}
+由~\eqref{eq:zeta-global-quadratic}，其绝对值至多为
+\[
+ \frac{KL}{n}\int_0^\infty u^2e^{-Lu}\,du
+ =\frac{KL}{n}\frac2{L^3}=\frac{2K}{nL^2}.
+\]
+所用指数矩可由 $t=Lu$ 及两次分部积分计算：$\int_0^\infty te^{-t}\,dt=1$、$\int_0^\infty t^2e^{-t}\,dt=2$；边界项为零，指数衰减也保证可积性。于是得到绝对常数 $C=2K$ 满足
+\begin{equation}\label{eq:weight-pointwise-error}
+ \boxed{\left|\nu_\Lambda(n)-\frac1{n\log n}\right|
+ \le\frac{C}{n(\log n)^2}\qquad(n\ge2).}
+\end{equation}
+常数对全部整数 $n\ge2$ 一致，并非仅对依赖于 $n$ 的局部积分有效。
+
+\paragraph{绝对可求和误差与密度不变性。}
+函数 $1/[t(\log t)^2]$ 在 $t\ge2$ 上正且递减，而
+\[
+ \int_2^\infty\frac{dt}{t(\log t)^2}=\frac1{\log2}<\infty.
+\]
+积分判别法和~\eqref{eq:weight-pointwise-error}~因而给出
+\begin{equation}\label{eq:weight-summable-error}
+ D:=\sum_{n\ge1}|\nu_\Lambda(n)-\nu_0(n)|
+ \le1+C\sum_{n\ge2}\frac1{n(\log n)^2}<\infty.
+\end{equation}
+右侧的 $1$ 是 $n=1$ 处的差；$n=0$ 的补充值不产生误差。Prim 在这里使用 Cauchy 凝聚判别法，将控制级数变成 $1/[k^2(\log2)^2]$ 的求和；与正文的积分判别法证明的是同一收敛结论。
+
+对任意 $A\subseteq\N_{>0}$ 和实数 $x$，记
+$V_A^{\le}(x)=\sum_{n\in A,\,n\le x}\nu_\Lambda(n)$。三角不等式给出
+\begin{equation}\label{eq:weight-uniform-truncation}
+ \left|V_A^{\le}(x)-W_A^{\le}(x)\right|
+ \le\sum_{\substack{n\in A\\n\le x}}|\nu_\Lambda(n)-\nu_0(n)|\le D.
+\end{equation}
+这里 $D$ 同时独立于 $A$ 和 $x$。对 $x>e$ 除以正数 $\log\log x$，差的绝对值不超过 $D/\log\log x\to0$。所以
+\begin{equation}\label{eq:mangoldt-density-equality}
+ \limsu\frac{V_A^{\le}(x)}{\log\log x}
+ =\limsu\frac{W_A^{\le}(x)}{\log\log x}=\Delta(A).
+\end{equation}
+例如可对任意 $\varepsilon>0$，在充分大处用两个归一化量相差至多 $\varepsilon$ 作双向比较，再令 $\varepsilon\downarrow0$。
+为与 Prim 的实数值上极限一致，还可核对这里不存在无界歧义：正递减函数 $1/(t\log t)$ 的积分比较给出
+$W_A^{\le}(x)\le\log\log x+O(1)$；结合非负性和~\eqref{eq:weight-uniform-truncation}，两个归一化量最终都有界。
+
+\paragraph{截断访问次数的一阶矩。}
+定义可测随机变量
+\[
+ Z_A(x)=\sum_{k\ge0}\mathbf1_{\{X_k\in A,\ X_k\le x\}}.
+\]
+$x<1$ 时它恒为零；若 $x\ge1$，令 $N=\lfloor x\rfloor$，由 $X_k\ge k+1$ 知 $k\ge N$ 时所有指示函数恒为零。因此它是至多 $N$ 项可测指示函数之和，满足 $0\le Z_A(x)\le N$，在概率空间上可积。先对时间的有限和取期望，再将每个事件按有限多个状态拆分，得到
+\begin{align*}
+ \mathbb E Z_A(x)
+ &=\sum_{k=0}^{N-1}\mathbb P(X_k\in A,\ X_k\le x)\\
+ &=\sum_{\substack{n\in A\\n\le x}}\sum_{k=0}^{N-1}\mathbb P(X_k=n)
+ =\sum_{\substack{n\in A\\n\le x}}\nu_\Lambda(n).
+\end{align*}
+最后一步用命题~\ref{prop:visit-identity}，因为 $n\le N$ 时所有更晚的访问概率均为零。由此及~\eqref{eq:weight-uniform-truncation}，
+\begin{equation}\label{eq:first-moment-weight}
+ \boxed{\begin{gathered}
+ \mathbb E Z_A(x)=V_A^{\le}(x)=W_A^{\le}(x)+O(1),\\
+ \limsu\frac{\mathbb E Z_A(x)}{\log\log x}=\Delta(A).
+ \end{gathered}}
+\end{equation}
+$O(1)$ 可统一取为 $D$。这完成了从随机过程到数论加权密度的一阶矩联系，尚未交换期望与路径上极限；确定性高密度路径的提取仍需后续论证。
+
+\subsection{二阶矩：待展开}
+沿用上一小节的 $Z_A(x)$。一阶矩已由式~\eqref{eq:first-moment-weight}~证明，后续需要补全以下二阶矩估计：
 \begin{equation}\label{eq:moment-goals}
- \mathbb E Z_A(x)=\sum_{\substack{n\in A\\n\le x}}\nu_\Lambda(n),
- \qquad \mathbb E[Z_A(x)^2]\ll(\log\log x)^2.
+ \mathbb E[Z_A(x)^2]\ll(\log\log x)^2.
 \end{equation}
 本轮不展开质因子个数函数与二阶矩的关系。
 
