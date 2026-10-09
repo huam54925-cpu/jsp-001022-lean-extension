@@ -407,7 +407,7 @@ $(\Omega(1)+1)\nu_\Lambda(1)=1$。令
  |P(t)-\log\log t|\le B_p\qquad(t\ge2),
 \end{equation}
 其中 $P(t)=\sum_{p\le t}1/p$，$B_p\ge0$ 是绝对常数。以下说明这一输入的来源，避免把它当作素数定理的直接推论。
-记 $Q(t)=\sum_{2\le q\le t}\Lambda(q)/q$、$\psi(t)=\sum_{q\le t}\Lambda(q)$。
+记 $Q(t)=\sum_{2\le q\le t}\Lambda(q)/q$、$\psi(t)=\sum_{q\le t}\Lambda(q)=\sum_{p^r\le t}\log p$，后一个和遍历素数 $p$ 与整数 $r\ge1$。
 对整数 $N\ge1$，交换有限因子和得到
 \[
  \log(N!)=\sum_{q\le N}\Lambda(q)\lfloor N/q\rfloor,
@@ -419,7 +419,7 @@ Chebyshev 型界 $\psi(N)\le c_\psi N$ 可由二项式系数初等证明。素�
  v_p\binom{2m}{m}=\sum_{r\ge1}
  \left(\lfloor2m/p^r\rfloor-2\lfloor m/p^r\rfloor\right),
 \]
-每项为 $0$ 或 $1$。区间 $(m,2m]$ 中每个素数幂 $p^r$ 在
+每项为 $0$ 或 $1$。特别地，若 $m<p^r\le2m$，则 $\lfloor2m/p^r\rfloor=1$ 而 $\lfloor m/p^r\rfloor=0$，对应估值项恰为 $1$。区间 $(m,2m]$ 中每个素数幂 $p^r$ 在
 $\log\binom{2m}{m}$ 的素因子估值展开中贡献一项 $\log p$，其他估值项非负，故
 \[
  \psi(2m)-\psi(m)\le\log\binom{2m}{m}\le2m\log2.
@@ -470,15 +470,107 @@ $\int_2^\infty du/[u(\log u)^2]<\infty$ 控制，端点误差也有界。故 $S(
 \[
  \sup_{x\ge e^e}\mathbb E[Y_x^2]\le C_*.
 \]
-本轮至此只得到二阶矩的一致控制；统一可积性、反向 Fatou 以及同一条高密度确定性路径的提取留待下一阶段。
+至此得到二阶矩的一致控制；下一小节据此证明统一可积性，并通过反向 Fatou 提取同一条高密度确定性路径。
 
-\subsection{反向 Fatou 与确定性路径：待展开}
-沿使加权密度趋于 $\Delta(A)$ 的尺度序列归一化后，还需利用矩控制与反向 Fatou 论证，选出\emph{同一条}确定性环境链 $m_0\mid m_1\mid\cdots$，满足
-\begin{equation}\label{eq:ambient-hits}
- \limsu\frac{\#\{i\ge0:m_i\in A,\ m_i\le x\}}{\log\log x}
- \ge\Delta(A).
+\subsection{统一可积性、反向 Fatou 与确定性路径}
+固定 $A\subseteq\N_{>0}$，设 $d=\Delta(A)>0$。由上一小节及式~\eqref{eq:first-moment-weight}，对 $x\ge e^e$ 定义
+\[
+ Y_x=\frac{Z_A(x)}{\log\log x},\qquad g(x)=\mathbb E Y_x,
+\]
+则 $Y_x$ 是非负可积随机变量，且
+\begin{equation}\label{eq:fatou-moment-inputs}
+ \limsu g(x)=d,\qquad
+ \sup_{x\ge e^e}\mathbb E[Y_x^2]\le C_*.
 \end{equation}
-本节构造的无限路径空间是这一步的前提；仅在每个尺度分别选出一条有限链，仍不能保证这些链相容。
+这里 $d$ 是有限实数：由 $0\le W_A^{\le}(x)\le\log\log x+O(1)$ 可知 $0\le d\le1$。全过程均在第~3.2~小节构造的同一个概率空间上进行，该空间的每个样本已经是一条无限严格整除链。
+
+\paragraph{选择实现期望上极限的尺度。}
+由实数上极限的定义，对每个整数 $j\ge0$，$g(x)\le d+1/(j+1)$ 在充分大处成立，而 $g(x)>d-1/(j+1)$ 在任意大的尺度仍能成立。因此可以递归选取
+\begin{equation}\label{eq:fatou-scale-sequence}
+ x_j\ge\max\{e^e,j+1\},\qquad x_{j+1}>x_j+1,
+ \qquad |g(x_j)-d|\le\frac1{j+1}.
+\end{equation}
+选择每个 $x_j$ 时同时超过相应上界的最终成立阈值即可。这给出 $x_j\to\infty$ 和 $\mathbb E Y_{x_j}\to d$；不要求 $g$ 连续，也不要求对 $x$ 有联合可测性。以下记 $Y_j=Y_{x_j}$。每个 $Y_j$ 可测，且 $\mathbb E[Y_j^2]\le C_*$ 对所有 $j$ 成立。
+
+\paragraph{二阶矩给出的统一可积性。}
+对任意 $M>0$，逐点有
+\[
+ 0\le Y_x\mathbf1_{\{Y_x>M\}}\le\frac{Y_x^2}{M}.
+\]
+对概率空间积分并取上确界，得到
+\begin{equation}\label{eq:uniform-integrable-tail}
+ \sup_{x\ge e^e}\mathbb E\bigl[Y_x\mathbf1_{\{Y_x>M\}}\bigr]
+ \le\frac{C_*}{M}\longrightarrow0\qquad(M\to\infty).
+\end{equation}
+这就是该非负可积随机变量族的统一可积性，特别也适用于子族 $(Y_j)$。此处控制的是积分尾部，不是断言存在一个同时逐点支配所有 $Y_j$ 的可积随机变量。
+
+\paragraph{有界截断上的反向 Fatou。}
+定义扩展非负实值函数
+\[
+ F(\omega)=\limsup_{j\to\infty}Y_j(\omega)
+ =\inf_{r\ge0}\sup_{j\ge r}Y_j(\omega)\in[0,\infty].
+\]
+可数上确界和下确界保持可测性，故 $F$ 可测。允许 $F=+\infty$，其期望按非负 Lebesgue 积分理解。
+固定有限的 $M>0$，令 $Y_j^{(M)}=\min\{Y_j,M\}$。这些变量可测且被可积常数 $M$ 支配。对非负变量 $M-Y_j^{(M)}$ 应用通常的 Fatou 引理，得到
+\[
+ \mathbb E\bigl[\liminf_j(M-Y_j^{(M)})\bigr]
+ \le\liminf_j\mathbb E[M-Y_j^{(M)}].
+\]
+两侧均有限，且概率空间的总质量为 $1$，因此可从 $M$ 中相减，得到有界截断的反向 Fatou 不等式
+\begin{equation}\label{eq:truncated-reverse-fatou}
+ \mathbb E\bigl[\limsup_jY_j^{(M)}\bigr]
+ \ge\limsup_j\mathbb E[Y_j^{(M)}].
+\end{equation}
+另一方面，$0\le Y_j-Y_j^{(M)}\le Y_j\mathbf1_{\{Y_j>M\}}$，由~\eqref{eq:uniform-integrable-tail}~知
+\[
+ 0\le\mathbb E Y_j-\mathbb E Y_j^{(M)}\le\frac{C_*}{M}.
+\]
+故 $\limsup_j\mathbb E Y_j^{(M)}\ge d-C_*/M$。
+
+对任意非负数列（允许上极限无穷），截断与上极限满足
+\begin{equation}\label{eq:truncation-limsup-commute}
+ \limsup_j\min\{Y_j(\omega),M\}=\min\{F(\omega),M\}.
+\end{equation}
+可先将 $\min(\cdot,M)$ 与每个尾部的上确界交换，再令尾部上确界单调下降；有限高度截断保持这一极限。若 $F(\omega)=\infty$，所有尾部上确界都为无穷，等式两端均为 $M$。
+由以上各式，
+\[
+ \mathbb E\min\{F,M\}\ge d-\frac{C_*}{M}.
+\]
+现在仅沿正整数高度 $M\to\infty$ 取极限。由于 $\min\{F,M\}\uparrow F$，单调收敛定理给出
+\begin{equation}\label{eq:fatou-extended-expectation}
+ \boxed{\mathbb E F
+ =\lim_{M\to\infty}\mathbb E\min\{F,M\}
+ \ge d=\Delta(A).}
+\end{equation}
+这里从未作 $\infty-\infty$ 运算，也不需要假设 $F$ 有限或可积。统一二阶矩控制的是各个 $Y_j$，本论证不将其误用为 $F$ 可积的结论。
+
+Prim 的对应证明同样截断，但采用 $Y_j\le\min(Y_j,R)+Y_j^2/R$ 直接估计积分余项，并对可测代表调用有界支配下的反向 Fatou；随后用 $C_*/R\to0$ 和扩展非负实数的序关系去掉误差。正文则显式写出统一可积性、式~\eqref{eq:truncation-limsup-commute}~和单调收敛。这些步骤承担相同的数学职责，并非源码的逐行翻译。
+
+\paragraph{选出达到下界的一个样本。}
+由~\eqref{eq:fatou-extended-expectation}~可以得到某个 $\omega_0$ 满足 $F(\omega_0)\ge d$，但需要说明为什么下界是 $d$ 本身而不只是任意 $d-\varepsilon$。
+反设所有样本均有 $F(\omega)<d$。此时 $F$ 处处有限且被常数 $d$ 支配，令 $D(\omega)=d-F(\omega)>0$。可测集合
+\[
+ B_r=\{\omega:D(\omega)\ge1/r\},\qquad r\ge1,
+\]
+的并为整个概率空间。由于其总概率为 $1$，至少一个 $B_r$ 的概率严格为正。于是
+\[
+ \mathbb E D\ge\frac{\mathbb P(B_r)}r>0,
+ \qquad \mathbb E F=d-\mathbb E D<d,
+\]
+与~\eqref{eq:fatou-extended-expectation}~矛盾。故所需样本存在。这个反证也覆盖 $\mathbb E F=\infty$ 的可能性，因为反设本身会迫使该期望有限。
+
+固定此 $\omega_0$，令 $m_i=X_i(\omega_0)$。同一个样本的所有坐标共同定义一条从 $1$ 出发的无限严格递增整除链。对任意充分大的 $T$，因 $x_j\to\infty$，所有充分大的 $j$ 均满足 $x_j\ge T$，从而
+\[
+ \sup_{x\ge T}Y_x(\omega_0)
+ \ge\limsup_jY_{x_j}(\omega_0)=F(\omega_0).
+\]
+再令 $T\to\infty$，得到扩展非负实数意义下的结论
+\begin{equation}\label{eq:ambient-hits}
+ \boxed{\limsu\frac{\#\{i\ge0:m_i\in A,\ m_i\le x\}}{\log\log x}
+ \ge F(\omega_0)\ge\Delta(A).}
+\end{equation}
+这里只对可数尺度序列的上极限取积分；全体实数尺度的比较是固定样本后的数值不等式，无需声称不可数上确界作为随机变量可测。
+样本 $\omega_0$ 可以依赖于集合 $A$，但不再随截断尺度改变。因此所得是同一条无限环境链，而不是对每个尺度分别挑选不同的有限链。若某条路径的上极限为无穷，它同样满足所需下界。下一小节从这条固定环境链中提取属于 $A$ 的无限子链。
 
 \subsection{从访问指标抽取子链}
 \begin{lemma}[集合内子链提取]\label{lem:extract}
@@ -495,4 +587,4 @@ $\int_2^\infty du/[u(\log u)^2]<\infty$ 控制，端点误差也有界。故 $S(
 因而所需的上极限下界原样保留。
 \end{proof}
 
-这样，已有整除链定理的证明职责被分解为：先证明概率方法给出的~\eqref{eq:ambient-hits}，再应用引理~\ref{lem:extract}。本轮已展开随机环境链本身的构造；从随机链得到上述密度下界的步骤仍作有明确来源的引用，子链提取则保留完整推导。尚不把这一阶段描述为对上游全部证明的逐项复现。
+这样，已有整除链定理的证明职责被分解为：先证明概率方法给出的~\eqref{eq:ambient-hits}，再应用引理~\ref{lem:extract}。本章已将随机链构造、访问与矩估计、确定性路径选择和子链提取连接起来，从而得到定理~\ref{thm:upstream}~的数学证明。正文与固定源码在若干分析步骤采用不同的表述；这一数学阐释不等同于重新运行 Lean 验证。
