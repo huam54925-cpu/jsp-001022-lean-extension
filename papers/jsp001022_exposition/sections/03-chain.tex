@@ -298,12 +298,179 @@ $x<1$ 时它恒为零；若 $x\ge1$，令 $N=\lfloor x\rfloor$，由 $X_k\ge k+1
 \end{equation}
 $O(1)$ 可统一取为 $D$。这完成了从随机过程到数论加权密度的一阶矩联系，尚未交换期望与路径上极限；确定性高密度路径的提取仍需后续论证。
 
-\subsection{二阶矩：待展开}
-沿用上一小节的 $Z_A(x)$。一阶矩已由式~\eqref{eq:first-moment-weight}~证明，后续需要补全以下二阶矩估计：
-\begin{equation}\label{eq:moment-goals}
- \mathbb E[Z_A(x)^2]\ll(\log\log x)^2.
+\subsection{二阶矩与质因子数加权估计}
+上一小节确定了一阶矩；本小节证明归一化访问次数在二阶矩意义下一致有界。关键是整除链对访问时间的算术限制，而不是不同时刻访问事件的独立性。
+
+\paragraph{从两次访问到带时间权重的一次访问。}
+固定 $x\ge1$，令 $N=\lfloor x\rfloor$，并记
+$E_k(x)=\{X_k\in A,\ X_k\le x\}$。坐标可测且状态空间离散，故这些事件及它们的交均可测。由 $X_k\ge k+1$，$k\ge N$ 时 $E_k(x)=\varnothing$，于是
+\[
+ \mathbb E[Z_A(x)^2]
+ =\sum_{0\le i,j<N}\mathbb P(E_i(x)\cap E_j(x)).
+\]
+这是有限指示函数之和的平方及其积分，所有换序均在有限和中进行。把有序对分成 $i\le j$ 和 $j\le i$ 两部分，允许对角线被重复计入，利用交事件包含于任一事件，得到
+\begin{equation}\label{eq:pair-index-bound}
+ \begin{split}
+ \mathbb E[Z_A(x)^2]
+ &\le\sum_{j<N}\sum_{i\le j}\mathbb P(E_j(x))
+    +\sum_{i<N}\sum_{j\le i}\mathbb P(E_i(x))\\
+ &=2\sum_{j<N}(j+1)\mathbb P(E_j(x)).
+ \end{split}
 \end{equation}
-本轮不展开质因子个数函数与二阶矩的关系。
+这只使用非负性和事件包含关系，没有把交事件概率写成概率的乘积。
+
+\paragraph{严格整除限制访问时间。}
+对正整数定义带重数的素因子个数
+\[
+ \Omega(n)=\sum_p v_p(n),\qquad\Omega(1)=0.
+\]
+它对应 mathlib 的 $\texttt{ArithmeticFunction.cardFactors}$，即素因子列表的长度；不同于只数不同素因子的函数。对正整数 $a,c$，素因子分解给出
+$\Omega(ac)=\Omega(a)+\Omega(c)$。若 $a\mid b$ 且 $a<b$，写 $b=ac$，则 $c\ge2$，所以 $\Omega(b)\ge\Omega(a)+1$。沿路径从 $X_0=1$ 归纳，得到
+\begin{equation}\label{eq:index-omega}
+ j\le\Omega(X_j),\qquad
+ X_j=n\ \Longrightarrow\ j+1\le\Omega(n)+1.
+\end{equation}
+这包括 $n=1$：只能有 $j=0$，两侧均为 $1$。
+按终点状态拆分每个 $E_j(x)$，以~\eqref{eq:index-omega}~控制非空纤维，再使用访问概率恒等式，有
+\begin{align*}
+ \sum_{j<N}(j+1)\mathbb P(E_j(x))
+ &=\sum_{\substack{n\in A\\1\le n\le x}}\sum_{j<N}(j+1)\mathbb P(X_j=n)\\
+ &\le\sum_{\substack{n\in A\\1\le n\le x}}(\Omega(n)+1)
+     \sum_{j<N}\mathbb P(X_j=n)\\
+ &=\sum_{\substack{n\in A\\1\le n\le x}}(\Omega(n)+1)\nu_\Lambda(n).
+\end{align*}
+若 $j>\Omega(n)$，该纤维为空，不需要对不可能的访问另加假设。故
+\begin{equation}\label{eq:moment-terminal-bound}
+ \boxed{\mathbb E[Z_A(x)^2]
+ \le2\sum_{\substack{n\in A\\1\le n\le x}}(\Omega(n)+1)\nu_\Lambda(n).}
+\end{equation}
+$x<1$ 时两边均为零。
+
+\paragraph{适用于算术加权和的逐点支配。}
+由~\eqref{eq:weight-pointwise-error}~及 $\log n\ge\log2$，对 $n\ge2$ 有
+\begin{equation}\label{eq:weight-multiplicative-domination}
+ 0<\nu_\Lambda(n)\le\nu_0(n)
+       +\frac{C}{n(\log n)^2}
+ \le M\nu_0(n),\qquad M=1+\frac C{\log2}.
+\end{equation}
+这是可以乘以任意非负系数的逐点支配。单凭无权误差的绝对可和性，不能断言乘上无界的 $\Omega(n)$ 后误差仍可和；本节不作这种推断。$n=1$ 处单独贡献至多
+$(\Omega(1)+1)\nu_\Lambda(1)=1$。令
+\[
+ T(N)=\sum_{n=2}^N\frac{\Omega(n)+1}{n\log n},\qquad
+ H(N)=\sum_{n=2}^N\frac1{n\log n},\qquad
+ P(N)=\sum_{\substack{p\le N\\p\text{ 为素数}}}\frac1p.
+\]
+去掉对集合 $A$ 的限制只增加非负项，因此
+\begin{equation}\label{eq:mangoldt-terminal-comparison}
+ \sum_{\substack{n\in A\\1\le n\le x}}(\Omega(n)+1)\nu_\Lambda(n)
+ \le1+M T(\lfloor x\rfloor)\qquad(x\ge2).
+\end{equation}
+
+\paragraph{素数幂展开与乘积估计。}
+素因子分解的准确计数公式为
+\begin{equation}\label{eq:omega-prime-power-count}
+ \Omega(n)=\sum_p\sum_{r\ge1}\mathbf1_{\{p^r\mid n\}}
+ \qquad(n\ge1).
+\end{equation}
+对每个固定 $n$，只有有限项非零。对 $n\ge2$，还有 $\Omega(n)+1\le2\Omega(n)$。固定 $q\ge2$，把其倍数写成 $n=qm$。当 $m\ge2$ 时，
+\[
+ \nu_0(qm)=\frac1{qm\log(qm)}\le\frac1q\nu_0(m);
+\]
+当 $m=1$ 时，必须另用 $\nu_0(q)\le1/(q\log2)$，不能用 $\nu_0(1)=0$ 作为上界。因此
+\begin{equation}\label{eq:erdos-multiples-bound}
+ \sum_{\substack{2\le n\le N\\q\mid n}}\nu_0(n)
+ \le\frac1q\left(\frac1{\log2}+H(N)\right).
+\end{equation}
+若 $q>N$，左侧为空；该不等式仍成立。交换~\eqref{eq:omega-prime-power-count}~所产生的有限求和，并将非负的素数幂倒数和扩大到全体正指数，得到
+\begin{align*}
+ T(N)&\le2\sum_{\substack{p^r\le N\\p\text{ 为素数},\ r\ge1}}
+              \sum_{\substack{2\le n\le N\\p^r\mid n}}\nu_0(n)\\
+ &\le2\left(\frac1{\log2}+H(N)\right)
+        \sum_{p\le N}\sum_{r\ge1}p^{-r}\\
+ &=2\left(\frac1{\log2}+H(N)\right)\sum_{p\le N}\frac1{p-1}.
+\end{align*}
+此处及以下以 $p$ 为指标的和均只对素数取值。由 $1/(p-1)\le2/p$，得到与 Prim 相同的乘积型上界
+\begin{equation}\label{eq:omega-erdos-product}
+ \boxed{T(N)\le4\left(\frac1{\log2}+H(N)\right)P(N).}
+\end{equation}
+几何级数的公比 $1/p<1$，所以延伸指数求和合法；其余换序都是有限换序。源码把指数先截在 $1\le r\le N$，再用几何级数上界，数学作用相同。
+
+\paragraph{两个双对数因子的来源。}
+首先，递减函数 $1/(t\log t)$ 的积分比较给出某个绝对常数 $B\ge0$，使
+\begin{equation}\label{eq:erdos-terminal-loglog}
+ H(N)\le B+\log\log N\qquad(N\ge2).
+\end{equation}
+例如取 $B=1/(2\log2)+|\log\log2|$ 即可。源码通过相邻对数增量及第二章已出现的双对数主项估计得到同一上界。
+
+其次，需要素数倒数和的 Mertens 估计
+\begin{equation}\label{eq:prime-reciprocal-loglog}
+ |P(t)-\log\log t|\le B_p\qquad(t\ge2),
+\end{equation}
+其中 $P(t)=\sum_{p\le t}1/p$，$B_p\ge0$ 是绝对常数。以下说明这一输入的来源，避免把它当作素数定理的直接推论。
+记 $Q(t)=\sum_{2\le q\le t}\Lambda(q)/q$、$\psi(t)=\sum_{q\le t}\Lambda(q)$。
+对整数 $N\ge1$，交换有限因子和得到
+\[
+ \log(N!)=\sum_{q\le N}\Lambda(q)\lfloor N/q\rfloor,
+ \qquad 0\le NQ(N)-\log(N!)\le\psi(N).
+\]
+这里使用的是~\eqref{eq:mangoldt-divisors}，以及 $0\le N/q-\lfloor N/q\rfloor<1$。
+Chebyshev 型界 $\psi(N)\le c_\psi N$ 可由二项式系数初等证明。素数 $p$ 在二项式系数中的估值为
+\[
+ v_p\binom{2m}{m}=\sum_{r\ge1}
+ \left(\lfloor2m/p^r\rfloor-2\lfloor m/p^r\rfloor\right),
+\]
+每项为 $0$ 或 $1$。区间 $(m,2m]$ 中每个素数幂 $p^r$ 在
+$\log\binom{2m}{m}$ 的素因子估值展开中贡献一项 $\log p$，其他估值项非负，故
+\[
+ \psi(2m)-\psi(m)\le\log\binom{2m}{m}\le2m\log2.
+\]
+沿二的幂望远镜求和，再把一般 $N$ 向上放大到小于 $2N$ 的二的幂，可取 $c_\psi=4\log2$（$N=1$ 单独显然）。另一方面，积分比较给出
+$N\log N-N+1\le\log(N!)\le N\log N$。
+因此 $Q(N)=\log N+O(1)$。对实数 $t\ge2$，取 $N=\lfloor t\rfloor$，有 $Q(t)=Q(N)$ 且 $0\le\log t-\log N\le\log2$，所以仍有
+$Q(t)=\log t+O(1)$，误差绝对值由同一绝对常数控制。
+
+对有限阶梯函数 $Q$ 作分部求和，得到
+\[
+ S(t):=\sum_{2\le q\le t}\frac{\Lambda(q)}{q\log q}
+ =\frac{Q(t)}{\log t}+\int_2^t\frac{Q(u)}{u(\log u)^2}\,du.
+\]
+下端使用 $Q(2^-)=0$，故没有遗漏 $q=2$ 的原子。代入 $Q(u)=\log u+O(1)$，主积分为
+$\log\log t-\log\log2$；误差积分由
+$\int_2^\infty du/[u(\log u)^2]<\infty$ 控制，端点误差也有界。故 $S(t)=\log\log t+O(1)$。
+由于 $\Lambda$ 仅在素数幂处非零，
+\[
+ 0\le S(t)-P(t)
+ =\sum_{\substack{p^r\le t\\r\ge2}}\frac1{r p^r}
+ \le\sum_p\sum_{r\ge2}p^{-r}
+ =\sum_p\frac1{p(p-1)}
+ \le\sum_{m=2}^\infty\frac1{m(m-1)}=1.
+\]
+这就证明~\eqref{eq:prime-reciprocal-loglog}。Prim 的实际路线同样先证明 $Q(t)$ 的有界误差，再作离散分部求和，最后比较 $S(t)$ 与 $P(t)$；其中使用 mathlib 的 Chebyshev 界及非素数部分的可和性。上面的二项式系数论证和几何级数比较说明了这些标准输入在本处承担的数学内容。
+
+\paragraph{合成并归一化。}
+取 $x\ge x_0:=e^e$，令 $N=\lfloor x\rfloor\ge2$、$L=\log\log x\ge1$。
+由双对数的单调性，~\eqref{eq:erdos-terminal-loglog}~与~\eqref{eq:prime-reciprocal-loglog}~给出
+\[
+ \frac1{\log2}+H(N)\le B_0+L\le(B_0+1)L,
+ \qquad P(N)\le B_p+L\le(B_p+1)L,
+ \quad B_0=\frac1{\log2}+B.
+\]
+因此令 $K_E=4(B_0+1)(B_p+1)$，由~\eqref{eq:omega-erdos-product}~得到 $T(N)\le K_E L^2$。再用~\eqref{eq:mangoldt-terminal-comparison}~及 $1\le L^2$，即得
+\[
+ \sum_{\substack{n\in A\\1\le n\le x}}(\Omega(n)+1)\nu_\Lambda(n)
+ \le(1+MK_E)L^2.
+\]
+结合~\eqref{eq:moment-terminal-bound}，最终有
+\begin{equation}\label{eq:moment-goals}
+ \boxed{\mathbb E[Z_A(x)^2]\le C_* (\log\log x)^2
+ \quad(x\ge e^e),\qquad C_*=2(1+MK_E)>0.}
+\end{equation}
+这些常数均来自全体整数或素数的估计，可以统一选取而不依赖 $A$；故当然也满足允许常数依赖 $A$ 的陈述。Prim 导出接口按 $A$ 给出存在常数及最终成立的范围，其证明中上述常数实际在选取 $A$ 之前已经确定。
+令 $Y_x=Z_A(x)/\log\log x$，于是
+\[
+ \sup_{x\ge e^e}\mathbb E[Y_x^2]\le C_*.
+\]
+本轮至此只得到二阶矩的一致控制；统一可积性、反向 Fatou 以及同一条高密度确定性路径的提取留待下一阶段。
 
 \subsection{反向 Fatou 与确定性路径：待展开}
 沿使加权密度趋于 $\Delta(A)$ 的尺度序列归一化后，还需利用矩控制与反向 Fatou 论证，选出\emph{同一条}确定性环境链 $m_0\mid m_1\mid\cdots$，满足
