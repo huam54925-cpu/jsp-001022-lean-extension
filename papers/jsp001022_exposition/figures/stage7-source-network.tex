@@ -1,0 +1,159 @@
+% 图 B：仅画所选声明之间经核读的直接显式引用；重复节点是跨面板端口。
+\begin{figure}[p]
+\centering
+\resizebox{.98\linewidth}{!}{%
+\begin{tikzpicture}[>=Latex,
+ box/.style={draw,rounded corners=2pt,align=center,text width=2.45cm,minimum height=.72cm,font=\scriptsize,fill=black!3},
+ edge/.style={->,line width=.45pt}]
+\node[box] (P01) at (0,0) {P01\\入流积分桥梁};
+\node[box] (P02) at (6,0) {P02\\倒数 ζ 端点};
+\node[box] (P03) at (3,-1.5) {P03\\严格入流递推};
+\node[box] (P04) at (3,-3) {P04\\下降核};
+\node[box] (P05) at (3,-4.5) {P05\\伴随向上核};
+\node[box] (P06) at (3,-6) {P06\\无限路径数据};
+\node[box] (P07) at (9,-3) {P07\\访问恒等式};
+\node[box] (P08) at (9,-4.5) {P08\\构造数据转换};
+\node[box] (P09) at (6,-7.5) {P09\\构造数据存在};
+\draw[edge] (P01) -- (P03);
+\draw[edge] (P02) -- (P03);
+\draw[edge] (P03) -- (P04);
+\draw[edge] (P04) -- (P05);
+\draw[edge] (P05) -- (P06);
+\draw[edge] (P06) -- (P09);
+\draw[edge] (P07) -- (P08);
+\draw[edge] (P08) -- (P09);
+\end{tikzpicture}
+}
+\caption{源码调用网络 B（a）：核与构造数据。箭头为被调用声明指向调用者；同编号节点跨面板表示同一声明。}
+\label{fig:source-network}
+\end{figure}
+\begin{figure}[p]
+\centering
+\resizebox{.98\linewidth}{!}{%
+\begin{tikzpicture}[>=Latex,
+ box/.style={draw,rounded corners=2pt,align=center,text width=2.45cm,minimum height=.72cm,font=\scriptsize,fill=black!3},
+ edge/.style={->,line width=.45pt}]
+\node[box] (P10) at (1.5,0) {P10\\权重点态误差};
+\node[box] (P33) at (7.5,0) {P33\\素数 Mertens};
+\node[box] (P34) at (11,0) {P34\\素数幂乘积界};
+\node[box] (P11) at (0,-1.7) {P11\\误差可求和};
+\node[box] (P14) at (3.5,-1.7) {P14\\权重点态支配};
+\node[box] (P13) at (9,-1.7) {P13\\Erdős 终端矩界};
+\node[box] (P12) at (0,-3.4) {P12\\密度比较};
+\node[box] (P15) at (6,-3.4) {P15\\Mangoldt 终端矩界};
+\node[box] (P17) at (6,-5.1) {P17\\终端界转二阶矩};
+\node[box] (P16) at (10,-5.1) {P16\\二点计数界};
+\node[box] (P18) at (8,-6.8) {P18\\构造数据的二阶矩};
+\draw[edge] (P10) -- (P11);
+\draw[edge] (P10) -- (P14);
+\draw[edge] (P11) -- (P12);
+\draw[edge] (P13) -- (P15);
+\draw[edge] (P14) -- (P15);
+\draw[edge] (P15) -- (P17);
+\draw[edge] (P16) -- (P18);
+\draw[edge] (P17) -- (P18);
+\draw[edge] (P33) -- (P13);
+\draw[edge] (P34) -- (P13);
+\end{tikzpicture}
+}
+\caption{源码调用网络 B（b）：权重比较与二阶矩。箭头为被调用声明指向调用者；同编号节点跨面板表示同一声明。}
+\label{fig:source-network-2}
+\end{figure}
+\begin{figure}[p]
+\centering
+\resizebox{.98\linewidth}{!}{%
+\begin{tikzpicture}[>=Latex,
+ box/.style={draw,rounded corners=2pt,align=center,text width=2.45cm,minimum height=.72cm,font=\scriptsize,fill=black!3},
+ edge/.style={->,line width=.45pt}]
+\node[box] (P19) at (0,0) {P19\\一阶矩上极限};
+\node[box] (P20) at (4,0) {P20\\计数与积分桥梁};
+\node[box] (P21) at (8,0) {P21\\截断反向 Fatou};
+\node[box] (P22) at (4,-1.5) {P22\\构造数据的提取原则};
+\node[box] (P09) at (0,-3) {P09\\构造数据存在};
+\node[box] (P18) at (4,-3) {P18\\构造数据的二阶矩};
+\node[box] (P23) at (8,-3) {P23\\模型打包};
+\node[box] (P24) at (4,-4.5) {P24\\随机模型存在};
+\node[box] (P25) at (11,-4.5) {P25\\模型性质投影};
+\node[box] (P26) at (11,-6) {P26\\固定路径提取};
+\node[box] (P27) at (6,-6) {P27\\环境链选择};
+\node[box] (P12) at (0,-6) {P12\\密度比较};
+\node[box] (P28) at (4,-7.5) {P28\\原权重环境链};
+\node[box] (P29) at (10,-7.5) {P29\\集合内子链};
+\node[box] (P30) at (7,-9) {P30\\Prim 最终定理};
+\draw[edge] (P09) -- (P24);
+\draw[edge] (P12) -- (P28);
+\draw[edge] (P18) -- (P24);
+\draw[edge] (P19) -- (P22);
+\draw[edge] (P20) -- (P22);
+\draw[edge] (P21) -- (P22);
+\draw[edge] (P22.east) -- (10,-1.5) -- (10,-3.9) -| (P24.east);
+\draw[edge] (P23) -- (P24);
+\draw[edge] (P24) -- (P27);
+\draw[edge] (P25) -- (P26);
+\draw[edge] (P26) -- (P27);
+\draw[edge] (P27) -- (P28);
+\draw[edge] (P28) -- (P30);
+\draw[edge] (P29) -- (P30);
+\end{tikzpicture}
+}
+\caption{源码调用网络 B（c）：反向 Fatou 与最终整除链。箭头为被调用声明指向调用者；同编号节点跨面板表示同一声明。}
+\label{fig:source-network-3}
+\end{figure}
+\begin{figure}[p]
+\centering
+\resizebox{.98\linewidth}{!}{%
+\begin{tikzpicture}[>=Latex,
+ box/.style={draw,rounded corners=2pt,align=center,text width=2.45cm,minimum height=.72cm,font=\scriptsize,fill=black!3},
+ edge/.style={->,line width=.45pt}]
+\node[box] (E02) at (0,0) {E02\\非负序列有限 Abel 下界};
+\node[box] (P31) at (8,0) {P31\\离散双对数主项};
+\node[box] (E03) at (0,-1.5) {E03\\倒数指示权专门化};
+\node[box] (E04) at (0,-3) {E04\\整数尺度双对数下界};
+\node[box] (E01) at (4,-3) {E01\\正下极限的最终正下界};
+\node[box] (E05) at (8,-3) {E05\\最终界转有限前缀假设};
+\node[box] (E06) at (4,-4.5) {E06\\组合整数尺度密度下界};
+\node[box] (E07) at (4,-6) {E07\\正下密度推出正加权密度};
+\node[box] (P32) at (8,-6) {P32\\取整误差};
+\draw[edge] (E01) -- (E06);
+\draw[edge] (E02) -- (E03);
+\draw[edge] (E03) -- (E04);
+\draw[edge] (E04) -- (E06);
+\draw[edge] (E05) -- (E06);
+\draw[edge] (E06) -- (E07);
+\draw[edge] (P31) -- (E04);
+\draw[edge] (P31.east) -- (10,0) -- (10,-7) -| (E07.south);
+\draw[edge] (P32) -- (E07);
+\end{tikzpicture}
+}
+\par\medskip
+\resizebox{.98\linewidth}{!}{%
+\begin{tikzpicture}[>=Latex,
+ box/.style={draw,rounded corners=2pt,align=center,text width=1.2cm,minimum height=.72cm,font=\scriptsize,fill=black!3},
+ edge/.style={->,line width=.45pt}]
+\node[box] (P30) at (1.3,0) {P30};
+\node[box] (P31) at (5.2,0) {P31};
+\node[box] (E11) at (5.2,-1.5) {E11};
+\node[box] (E07) at (0.0,-3) {E07};
+\node[box] (E08) at (1.95,-3) {E08};
+\node[box] (E09) at (3.9,-3) {E09};
+\node[box] (E10) at (5.85,-3) {E10};
+\node[box] (E12) at (7.8,-3) {E12};
+\node[box] (E13) at (9.75,-3) {E13};
+\node[box] (E14) at (11.7,-3) {E14};
+\node[box] (E15) at (5.85,-5.5) {E15};
+\draw[edge] (E07) -- (E15);
+\draw[edge] (E08) -- (E15);
+\draw[edge] (E09) -- (E15);
+\draw[edge] (E10) -- (E15);
+\draw[edge] (E11) -- (E12);
+\draw[edge] (E12) -- (E15);
+\draw[edge] (E13) -- (E15);
+\draw[edge] (E14) -- (E15);
+\draw[edge] (P30) -- (E08);
+\draw[edge] (P31) -- (E11);
+\draw[edge] (P31) -- (E12);
+\end{tikzpicture}
+}
+\caption{源码调用网络 B（d）：十五个扩展声明及其 Prim 入口。箭头为被调用声明指向调用者；同编号节点跨面板表示同一声明。}
+\label{fig:source-network-4}
+\end{figure}

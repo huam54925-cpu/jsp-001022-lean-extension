@@ -1,0 +1,33 @@
+% 图 A：数学推导关系，不是 Lean 直接调用图。
+\begin{figure}[p]
+\centering
+\resizebox{.96\linewidth}{!}{%
+\begin{tikzpicture}[>=Latex,box/.style={draw,rounded corners=2pt,align=center,text width=5.4cm,minimum height=1.1cm,font=\small},edge/.style={->,line width=.5pt}]
+\node[box] (A) at (0,0) {原假设\\$\underline\delta_{\log}(A)>0$};
+\node[box] (B) at (0,-1.7) {有限 Abel 与主项\\\eqref{eq:finite-abel}, \eqref{eq:main-term}};
+\node[box] (C) at (0,-3.4) {密度桥梁\\$\Delta(A)>0$；命题~\ref{prop:bridge}};
+\node[box] (D) at (7,0) {权重 $\nu_\Lambda$ 与严格入流\\命题~\ref{prop:mangoldt-inflow}};
+\node[box] (E) at (7,-1.7) {伴随核与同一无限路径空间\\\eqref{eq:upward-normalization}, \eqref{eq:chain-cylinders}};
+\node[box] (F) at (7,-3.4) {访问恒等式与权重比较\\命题~\ref{prop:visit-identity}, \eqref{eq:mangoldt-density-equality}};
+\node[box] (G) at (7,-5.1) {一阶、二阶矩及尺度选择\\\eqref{eq:moment-goals}, \eqref{eq:fatou-scale-sequence}};
+\node[box] (H) at (3.5,-7) {截断反向 Fatou 与固定样本\\$\exists\omega_0:\ \limsup_jY_{x_j}(\omega_0)\ge\Delta(A)$\\\eqref{eq:fatou-extended-expectation} 及其后反证};
+\node[box] (I) at (3.5,-9) {固定环境链 $m_i=X_i(\omega_0)$\\\eqref{eq:ambient-hits}};
+\node[box] (J) at (3.5,-10.7) {集合内无限子链 $(b_j)$\\引理~\ref{lem:extract}};
+\node[box] (K) at (3.5,-12.4) {正整数指标、严格截断及值域转换\\第~\ref{sec:conversion}~节};
+\node[box] (L) at (3.5,-14.1) {JSP-001022\\定理~\ref{thm:main}};
+\draw[edge] (A) -- (B);
+\draw[edge] (B) -- (C);
+\draw[edge] (D) -- (E);
+\draw[edge] (E) -- (F);
+\draw[edge] (F) -- (G);
+\draw[edge] (C) -- (H);
+\draw[edge] (G) -- (H);
+\draw[edge] (H) -- (I);
+\draw[edge] (I) -- (J);
+\draw[edge] (C.west) -- (-3.1,-3.4) -- (-3.1,-10.7) -- (J.west);
+\draw[edge] (J) -- (K);
+\draw[edge] (K) -- (L);
+\end{tikzpicture}}
+\caption{数学命题网络 A。右路先构造随机链；矩估计与反向 Fatou 仅保证存在一个达到下界的固定样本。左路的正密度还保证子链无限。各箭头依据见正文及 Stage 7 说明。}
+\label{fig:math-network}
+\end{figure}
