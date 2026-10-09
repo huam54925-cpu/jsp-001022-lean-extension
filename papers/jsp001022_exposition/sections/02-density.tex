@@ -1,0 +1,129 @@
+\section{有限 Abel 估计与密度转换}\label{sec:density}
+这一节把正下对数密度转化为双对数加权和的增长下界。为与有限求和一致，暂记
+\[
+ H_A^{\le}(x)=\sum_{\substack{n\in A\\1\le n\le x}}\frac1n,
+ \qquad W_A^{\le}(x)=\sum_{\substack{n\in A\\2\le n\le x}}\frac1{n\log n}.
+\]
+它们与引言中严格截断的和至多相差一个边界项，故相应的归一化极限相同。端点转换的详细说明放在第~\ref{sec:conversion}~节。
+
+\subsection{有限区间上的加权不等式}
+\begin{lemma}[下极限的最终下界]\label{lem:eventual}
+若 $\delta=\underline\delta_{\log}(A)>0$，则对每个 $0<c<\delta$，存在整数 $M\ge2$，使
+\begin{equation}\label{eq:lowerH}
+ H_A^{\le}(n)\ge c\log n\qquad(n\ge M).
+\end{equation}
+\end{lemma}
+\begin{proof}
+由下极限的定义，$H_A^{\le}(x)/\log x>c$ 对充分大的实数 $x$ 成立。取超过该阈值且不小于 $2$ 的整数 $M$，再将 $x$ 限制为整数即可。
+\end{proof}
+
+\begin{lemma}[有限 Abel 下界]\label{lem:abel}
+设 $u_n\ge0$，$c>0$，$2\le M\le N$，并令
+\[
+ S(t)=\sum_{k=0}^{t}u_k,\qquad B_M=S(M-1),\qquad
+ D_M(t)=\sum_{q=M+1}^{t}\frac{\log q-\log(q-1)}{\log q}.
+\]
+若 $S(n)\ge c\log n$ 对所有 $M\le n\le N$ 成立，则
+\begin{equation}\label{eq:finite-abel}
+ cD_M(N)-\frac{B_M}{\log M}
+ \le \sum_{n=2}^{N}\frac{u_n}{\log n}.
+\end{equation}
+这里的前缀下界只在有限区间 $[M,N]$ 上假设。
+\end{lemma}
+\begin{proof}
+对 $w_n=1/\log n$ 作离散分部求和，得到精确恒等式
+\begin{equation}\label{eq:abel}
+ \sum_{n=M}^{t}\frac{u_n}{\log n}
+ =\frac{S(t)}{\log t}-\frac{B_M}{\log M}
+ +\sum_{n=M}^{t-1}S(n)
+       \left(\frac1{\log n}-\frac1{\log(n+1)}\right)
+ \qquad(M\le t\le N).
+\end{equation}
+括号内的系数非负，故最后一项至少为
+\[
+ c\sum_{n=M}^{t-1}\log n
+       \left(\frac1{\log n}-\frac1{\log(n+1)}\right)
+ =cD_M(t).
+\]
+因而实际上有更强的不等式
+\begin{equation}\label{eq:strong-abel}
+ cD_M(t)-\frac{B_M}{\log M}+\frac{S(t)}{\log t}
+ \le\sum_{n=M}^{t}\frac{u_n}{\log n}.
+\end{equation}
+取 $t=N$，舍去非负项 $S(N)/\log N$，再补入右侧 $2\le n<M$ 的非负项，即得结论。
+\end{proof}
+
+取 $u_0=0$，并对 $n\ge1$ 取 $u_n=\mathbf1_A(n)/n$。此时 $S(n)=H_A^{\le}(n)$。结合引理~\ref{lem:eventual}，式~\eqref{eq:finite-abel}~给出
+\begin{equation}\label{eq:weight-specialization}
+ W_A^{\le}(N)\ge cD_M(N)-C_0,\qquad
+ C_0=\frac1{\log M}\sum_{\substack{1\le n<M\\n\in A}}\frac1n.
+\end{equation}
+常数 $C_0$ 保留了有限前缀的损失；在该专门化中，$n=1$ 的倒数项仍被计入前缀。
+
+\subsection{离散双对数主项}
+下面说明式~\eqref{eq:weight-specialization}~中的离散和为何具有所需的增长速度。
+\begin{lemma}\label{lem:main-term}
+存在绝对常数 $K\ge0$，使每个整数 $N\ge2$ 满足
+\begin{equation}\label{eq:main-term}
+ \left|\sum_{q=2}^{N}\frac{\log q-\log(q-1)}{\log q}
+       -\log\log N\right|\le K.
+\end{equation}
+特别地，固定 $M\ge2$ 时，$D_M(N)=\log\log N+O_M(1)$。
+\end{lemma}
+\begin{proof}
+对 $0<a\le b$，积分比较给出
+\[
+ 0\le\log b-\log a-\frac{b-a}{b}
+ =\int_a^b\left(\frac1t-\frac1b\right)\,dt
+ \le\frac{(b-a)^2}{ab}.
+\]
+令 $a=\log r$、$b=\log(r+1)$，其中 $r\ge2$。利用
+$\log(r+1)-\log r\le1/r$，可得
+\begin{equation}\label{eq:increment-error}
+\begin{split}
+ 0\le{}&\log\log(r+1)-\log\log r
+       -\frac{\log(r+1)-\log r}{\log(r+1)}\\
+ \le{}&\frac1{r^2(\log r)^2}
+ \le\frac1{r(\log r)^2}.
+\end{split}
+\end{equation}
+最后的控制级数收敛。将 $r=2,\ldots,N-1$ 的误差求和，双对数增量望远镜相消；另将 $q=2$ 时等于 $1$ 的首项计入常数，便得到~\eqref{eq:main-term}。去掉至 $M$ 为止的固定前缀，即得关于 $D_M$ 的结论。
+\end{proof}
+
+记 $E(M)=\sum_{q=2}^{M}(\log q-\log(q-1))/\log q$。由
+$D_M(N)=E(N)-E(M)$，式~\eqref{eq:weight-specialization}~具体给出
+\begin{equation}\label{eq:natural-bound}
+ W_A^{\le}(N)\ge c\log\log N-C\qquad(N\ge M),
+ \qquad C=C_0+c\bigl(K+E(M)\bigr).
+\end{equation}
+因此误差常数与终端截断 $N$ 无关。这正是由有限不等式通向密度结论所需的统一性。
+
+\subsection{从整数截断到实变量}
+\begin{proposition}[密度桥梁]\label{prop:bridge}
+若 $\underline\delta_{\log}(A)>0$，则
+\begin{equation}\label{eq:bridge}
+ \underline\delta_{\log}(A)
+ \le\limin\frac{W_A(x)}{\log\log x}
+ \le\overline\delta_{\log\log}(A)\le1.
+\end{equation}
+特别地，$\overline\delta_{\log\log}(A)>0$。
+\end{proposition}
+\begin{proof}
+固定 $0<c<\underline\delta_{\log}(A)$。对充分大的实数 $x$，令 $N=\lfloor x\rfloor$，则
+$W_A^{\le}(x)=W_A^{\le}(N)$，且
+\[
+ \frac{\log\log\lfloor x\rfloor}{\log\log x}\longrightarrow1.
+\]
+后一个极限由 $\lfloor x\rfloor/x\to1$ 及对数的连续性得到。将式~\eqref{eq:natural-bound}~除以 $\log\log x$，便有
+\begin{equation}\label{eq:quantbridge}
+ \limin\frac{W_A^{\le}(x)}{\log\log x}\ge c.
+\end{equation}
+另一方面，对递减函数 $1/(t\log t)$ 作积分比较，得到
+\[
+ 0\le W_A^{\le}(x)\le\sum_{2\le n\le x}\frac1{n\log n}
+ =\log\log x+O(1).
+\]
+这同时说明加权密度有限且至多为 $1$。改变单个边界项不改变归一化极限，故~\eqref{eq:quantbridge}~也适用于 $W_A(x)$。最后令 $c\uparrow\underline\delta_{\log}(A)$ 即得~\eqref{eq:bridge}。
+\end{proof}
+
+本节给出的是数学层面的常数比较。扩展源码中密度桥梁的对外结论仅为正性蕴含；证明内部使用固定正数及最终下界 $c/2$，并不声明已经形式化了~\eqref{eq:bridge}~的全部强化形式。已有 plby 形式化则明确输出下对数密度不超过双对数加权上密度的比较\cite{plby}。这些接口的差别及离散主项估计的来源，统一见最后一节。

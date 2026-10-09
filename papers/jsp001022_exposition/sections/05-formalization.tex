@@ -1,0 +1,61 @@
+\section{Lean 对应关系、源码依赖与核查范围}\label{sec:formal}
+\subsection{版本与数学接口}
+扩展源码取自提交 \nolinkurl{3992abb235729e5ebd0359d897470d6101acf908}；Prim 取自 \nolinkurl{a303f6bd23bb8f29a833d1d70327528359180995}。下列行号均对应这些固定文件，而非随时可能变化的默认分支。
+
+本节区分数学推导、源码显式引用和编译后证明项依赖。正文的有限 Abel 恒等式给出式~\eqref{eq:strong-abel}；扩展以该强化不等式为归纳不变量，使用自然数归纳实现有限估计。离散主项引理~\ref{lem:main-term}~对应 Prim 已有的 \nolinkurl{mangoldt_log_reciprocal_main_term_bound}（第 11114 行），并非扩展中新证明的上游估计。
+
+扩展的 \nolinkurl{jsp_001022_density_bridge} 只输出密度的正性蕴含。正文给出的更强常数比较不可等同于该声明的类型。plby 的 \nolinkurl{lowerLogDensity_le_weightedRate}（Density 第 533 行）已经形式化了下对数密度与加权上密度的比较；其第 259 行的有限 Abel 引理使用积分形式，与本扩展的离散归纳实现不同。这一实现差别不构成数学优先权或首次形式化的证明。
+
+\subsection{十五个声明及其显式引用}
+表中省略公共命名空间 \nolinkurl{LeanCompletion}；除 E08 外，还省略前缀 \nolinkurl{jsp_001022_}。末列只列扩展内部的直接显式引用，空白处表示未发现其他十四个声明的显式引用，不表示没有 Mathlib 或 Prim 依赖。
+
+{\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{longtable}{@{}p{.06\linewidth}p{.37\linewidth}p{.07\linewidth}p{.27\linewidth}p{.15\linewidth}@{}}
+\toprule
+编号 & 声明名 & 行号 & 数学职责 & 引用\\\midrule
+\endfirsthead
+\toprule
+编号 & 声明名 & 行号 & 数学职责 & 引用\\\midrule
+\endhead
+E01 & \nolinkurl{eventual_lower_bound} & 7 & 正下极限的最终下界 & ---\\
+E02 & \nolinkurl{finite_abel_lower_bound} & 38 & 一般非负数列的有限 Abel 不等式 & ---\\
+E03 & \nolinkurl{reciprocal_weight_specialization} & 112 & 倒数权专门化 & E02\\
+E04 & \nolinkurl{natural_loglog_lower_bound} & 155 & 自然数截断的双对数下界 & E03\\
+E05 & \nolinkurl{eventual_to_finite_prefix} & 198 & 实变量最终界转为有限前缀界 & ---\\
+E06 & \nolinkurl{density_to_natural_erdos_lower_bound} & 246 & 合成自然数尺度的加权下界 & E01, E04, E05\\
+E07 & \nolinkurl{density_bridge} & 293 & 正下对数密度推出正加权上密度 & E06\\
+E08 & \nolinkurl{erdos_1217_explicit} & 428 & 展开 Prim 的整除链定理 & ---\\
+E09 & \nolinkurl{chain_strict_cutoff} & 447 & 链计数的严格截断 & ---\\
+E10 & \nolinkurl{reciprocal_strict_cutoff} & 528 & 倒数和的严格截断 & ---\\
+E11 & \nolinkurl{erdos_strict_cutoff} & 649 & 加权和的严格截断 & ---\\
+E12 & \nolinkurl{erdos_density_ennreal} & 868 & 实数与扩展非负实数的加权上极限 & E11\\
+E13 & \nolinkurl{positive_enumeration_sums} & 1029 & 一般权重下的枚举与集合求和 & ---\\
+E14 & \nolinkurl{positive_subsequence_indices} & 1077 & 正整数子序列及精确计数 & ---\\
+E15 & \nolinkurl{original_enumeration_chain} & 1136 & 最终枚举定理 & E07, E08, E09, E10, E12, E13, E14\\
+\bottomrule
+\end{longtable}
+}
+
+E04 直接引用 Prim 的离散主项估计；E07 还引用第 11545 行的取整误差界。E11、E12 同样利用第 11114 行的主项估计取得最终上界。E08 直接调用第 14584 行的 \nolinkurl{erdos_sarkozy_szemeredi_1217}。这解释了为什么密度、端点与数系转换并不是一条没有分支的线性依赖链。
+
+此表由固定源码在去掉注释和字符串后提取声明标识符，并核读主要调用处得到。仓库中的 \nolinkurl{docs/JSP001022_SOURCE_GUIDE.md} 整理了固定源码链接、十五个声明的引用关系及上游阅读顺序。临时索引与下载源码留在本地，不作为仓库交付材料。这里的引用关系属于源码级核读，不包括策略展开、类型类搜索及简化器自动引入的全部依赖，也不等同于编译后证明项的依赖审计。
+
+\subsection{上游概率证明的阅读入口}
+Prim 中环境链定理的直接组合关系为：第 14423 行的 \nolinkurl{probabilistic_dense_ambient_chain} 使用权重密度比较（第 7962 行）与路径选取（第 14397 行）；后者使用随机模型存在性（第 14328 行）和反向 Fatou 路径提取（第 14366 行）。最终定理将环境链与第 14464 行的 \nolinkurl{dense_hits_subchain_in_set} 组合。
+
+随机模型存在性的证明体进一步调用构造数据存在性、二阶矩界及反向 Fatou 提取原则。它没有仅凭“随机模型”这个名称就完成概率论证。下一阶段按以下顺序展开其数学内容：
+\begin{enumerate}[leftmargin=2em]
+\item 不变权重与转移核：第 9423、9677 行；路径测度构造：第 9900 行。
+\item 访问恒等式：第 10232 行；权重的可求和误差与密度比较：第 7727、7962 行。
+\item 双点访问估计：第 10913 行；质因子数加权和：第 12817 行；二阶矩合成：第 12870、14149 行。
+\item 一阶、二阶矩接口：第 13677 行；截断反向 Fatou：第 13831 行；固定路径提取：第 14366 行。
+\end{enumerate}
+这些入口均已保存到本地源码检索材料；正文目前尚未逐项展开其证明。该待展开范围不同于声称已有 Lean 定理缺少证明。
+
+\subsection{现有审计材料与工作边界}
+扩展仓库现有 \nolinkurl{LeanCompletion/Audit.lean} 会独立重述最终类型，并用 \nolinkurl{Expr.getUsedConstants} 导出十五个声明的类型和证明体引用，另有公理检查及模块路径检查。现有 \nolinkurl{verification/targets.json} 保留核查目标，\nolinkurl{docs/VERIFICATION.md} 保留复现步骤。本轮只读取这些文件，没有执行其中的构建或审计命令。
+
+仓库的 2026 年 9 月 28 日验证摘要报告所选证明提交曾通过检查，但也明确说明使用了既有本地依赖，当前树不再分发原始执行日志。因此该历史记录不能写成本轮新的独立复现。本轮只修改 LaTeX、撰写说明并阅读源码，没有安装 Lean、下载依赖环境或运行编译。
+
+主定理沿用当前问题表述的正下对数密度。仓库的陈述对应文档报告 1966 年原文第 431 页文字与所印极限符号存在差异；本轮没有重新核对该历史页面，也不据此宣称正下密度与正上密度等价。对任意无限正整数集合构造递增枚举虽是通常数学事实，当前扩展的最终接口仍是正整数枚举形式，本稿不额外声称已提供集合枚举构造的 Lean 包装。
