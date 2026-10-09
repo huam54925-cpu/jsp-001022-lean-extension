@@ -12,30 +12,171 @@
 左侧允许取值 $+\infty$。
 \end{theorem}
 
-\subsection{概率构造需要提供的结论}
-上述定理可分成环境链的构造和集合内子链的提取。第一个部分需要证明：存在一条严格递增的正整数整除链 $m_0\mid m_1\mid\cdots$，使
+\subsection{von Mangoldt 函数与不变权重}
+以下状态空间为 $S=\N_{>0}$，时间指标为 $\N_0$。记
+\[
+ \Lambda(n)=\begin{cases}\log p,&n=p^k,\ p\text{ 为素数},\ k\ge1,\\0,&\text{其他情形}.
+ \end{cases}
+\]
+特别地，$\Lambda(1)=0$。若 $n=\prod_p p^{v_p(n)}$，则
+\begin{equation}\label{eq:mangoldt-divisors}
+ \sum_{d\mid n}\Lambda(d)=\sum_p\sum_{k=1}^{v_p(n)}\log p
+ =\sum_p v_p(n)\log p=\log n.
+\end{equation}
+$n=1$ 时两边均为零。
+
+令 $\zeta(s)=\sum_{r\ge1}r^{-s}$，其中 $s>1$。原论文\cite[Example 2.8]{alexeev2026}和固定版本 Prim 使用的权重是
+\begin{equation}\label{eq:mangoldt-weight-exact}
+ \boxed{\nu_\Lambda(1)=1,\qquad
+ \nu_\Lambda(n)=\int_1^\infty\frac{\log n}{\zeta(s)n^s}\,ds\quad(n\ge2).}
+\end{equation}
+Prim 的积分区间为 $(1,\infty)$，分母写作复 Riemann $\zeta$ 函数在实参数处的实部；在此区间它就是上式的正实数 $\zeta(s)$。本节始终排除状态 $0$。
+因为 $\zeta(s)>1$，被积函数连续且严格为正，并由可积函数 $\log n\,n^{-s}$ 控制，所以
+\[
+ 0<\nu_\Lambda(n)\le\int_1^\infty\log n\,n^{-s}\,ds=\frac1n
+ \qquad(n\ge2).
+\]
+这同时说明积分的有限性与权重的严格正性。Erd\H{o}s 权重则为
+$\nu_0(n)=1/(n\log n)$（$n\ge2$）；为统一求和可令 $\nu_0(1)=0$。两种权重在 $1$ 处尤其不能混淆，其总和的比较留待第~3.3~小节。
+
+不变权重的作用是平衡从较大整数流入较小整数的\emph{严格整除}转移。它不是总质量为 $1$ 的概率分布，也不是把状态 $1$ 的吸收自环包括在内的平稳分布。所需的准确恒等式如下。
+\begin{proposition}[严格入流恒等式]\label{prop:mangoldt-inflow}
+对每个 $n\ge1$，均有收敛的非负级数恒等式
+\begin{equation}\label{eq:mangoldt-inflow}
+ \boxed{\sum_{q\ge2}\nu_\Lambda(nq)\frac{\Lambda(q)}{\log(nq)}
+ =\nu_\Lambda(n).}
+\end{equation}
+\end{proposition}
+\begin{proof}
+写 $h(s)=1/\zeta(s)$。由积分比较，
+\[
+ \frac1{s-1}\le\zeta(s)\le1+\frac1{s-1},\qquad \zeta(s)\ge1,
+\]
+故 $h(1+)=0$，$h(+\infty)=1$。Euler 乘积的对数导数给出
+\begin{equation}\label{eq:reciprocal-zeta-derivative}
+ -\frac{\zeta'(s)}{\zeta(s)}=\sum_{q\ge2}\frac{\Lambda(q)}{q^s},
+ \qquad h'(s)=h(s)\sum_{q\ge2}\frac{\Lambda(q)}{q^s}\ge0.
+\end{equation}
+这里的逐项求导可在每个 $s\ge1+\varepsilon$ 的区间上用绝对、一致收敛证明；例如 $\Lambda(q)\le\log q$，而 $\sum_{q\ge2}(\log q)q^{-1-\varepsilon}$ 收敛。
+在有限区间应用微积分基本定理，再令端点趋向 $1$ 与无穷，由非负性得到
+\begin{equation}\label{eq:reciprocal-zeta-total-derivative}
+ \int_1^\infty h'(s)\,ds=1.
+\end{equation}
+将~\eqref{eq:mangoldt-weight-exact}~代入左端，由 Tonelli 定理交换非负求和与积分，得到
+\begin{align*}
+ \sum_{q\ge2}\nu_\Lambda(nq)\frac{\Lambda(q)}{\log(nq)}
+ &=\int_1^\infty n^{-s}h(s)\sum_{q\ge2}\Lambda(q)q^{-s}\,ds\\
+ &=\int_1^\infty n^{-s}h'(s)\,ds.
+\end{align*}
+交换时可先允许积分取扩展非负实数值；最后一个积分不超过 $\int h'=1$，因此也证明了级数的有限性，没有预先假设待证的可和性。
+当 $n=1$ 时，结果由~\eqref{eq:reciprocal-zeta-total-derivative}~给出，恰为定义中的 $\nu_\Lambda(1)=1$。
+当 $n\ge2$ 时，在 $[a,b]\subset(1,\infty)$ 上分部积分，然后令 $a\downarrow1$、$b\to\infty$：
+\[
+ \int_1^\infty n^{-s}h'(s)\,ds
+ =[n^{-s}h(s)]_{1+}^{\infty}
+   +\log n\int_1^\infty n^{-s}h(s)\,ds
+ =\nu_\Lambda(n).
+\]
+边界项均为零；左侧由 $h'$ 控制，右侧被积函数由 $n^{-s}$ 控制，所以此极限步骤合法。
+\end{proof}
+
+上述推导对应 Prim 的不变递推声明。正文采用非负积分的 Tonelli 论证；源码则先建立绝对可积求和的桥接等式，再调用倒数 $\zeta$ 的端点评估。两者的数学职责相同，但不能据此声称正文的每个中间不等式都已有同名 Lean 声明。
+
+\subsection{从下降整除链构造向上转移核}
+\paragraph{下降核与边界。}
+在 $S$ 上定义
+\begin{equation}\label{eq:downward-kernel}
+ P_\downarrow(n,m)=
+ \begin{cases}
+ 1,&n=m=1,\\
+ \Lambda(n/m)/\log n,&n\ge2,\ m\mid n,\ m<n,\\
+ 0,&\text{其他情形}.
+ \end{cases}
+\end{equation}
+$n\ge2$ 时分母严格为正，故所有转移概率非负。映射 $m\mapsto q=n/m$ 将正真因子与满足 $q\mid n$、$q>1$ 的因子一一对应。由~\eqref{eq:mangoldt-divisors}，
+\[
+ \sum_{m\in S}P_\downarrow(n,m)
+ =\frac1{\log n}\sum_{\substack{q\mid n\\q>1}}\Lambda(q)=1.
+\]
+$n=1$ 的行和则由吸收自环给出。因而它是一个下降 Markov 核，除吸收状态 $1$ 外仅沿严格整除关系转移。
+
+\paragraph{伴随向上核。}
+利用权重的严格正性，定义
+\begin{equation}\label{eq:upward-kernel}
+ U(m,n)=P_\uparrow(m,n)=
+ \begin{cases}
+ \displaystyle\frac{\nu_\Lambda(n)}{\nu_\Lambda(m)}P_\downarrow(n,m),&m\ne n,\\
+ 0,&m=n.
+ \end{cases}
+\end{equation}
+等价地，$U(m,mq)=\nu_\Lambda(mq)\Lambda(q)/(\nu_\Lambda(m)\log(mq))$（$q\ge2$），其余项为零。因此 $U\ge0$，且
+\[
+ U(m,n)>0\ \Longrightarrow\ m<n,\quad m\mid n;
+\]
+更精确地，商 $n/m$ 必须为素数幂。重新以 $n=mq$ 编号，再应用命题~\ref{prop:mangoldt-inflow}，得到每个 $m\ge1$ 的行和
+\begin{equation}\label{eq:upward-normalization}
+ \sum_{n\in S}U(m,n)
+ =\frac1{\nu_\Lambda(m)}\sum_{q\ge2}
+    \nu_\Lambda(mq)\frac{\Lambda(q)}{\log(mq)}=1.
+\end{equation}
+伴随平衡关系
+\[
+ \nu_\Lambda(m)U(m,n)=\nu_\Lambda(n)P_\downarrow(n,m)
+\]
+仅对 $m\ne n$ 声明。在 $(1,1)$ 处，右侧为 $1$ 而左侧为 $0$；若把下降核的吸收自环也搬到向上核，则会破坏归一化。
+
+原论文\cite[Definition 2.9, Example 2.11]{alexeev2026}允许加入状态 $\infty$，并把有限行和的亏损赋给 $U(m,\infty)$。本例由~\eqref{eq:upward-normalization}~知该亏损为零。从 $1$ 出发，在任一有限步到达 $\infty$ 的概率为零，所有步的可数并仍为零。因此可直接在 $S$ 上构造无限时间的链；整数状态随时间趋于无穷，并不意味着某一有限时刻跳到附加状态 $\infty$。
+
+\paragraph{同一无限路径空间上的构造。}
+给 $S$ 配备离散 $\sigma$-代数，以 $\delta_1$ 为初始分布，以 $U$ 为转移核。每一行都是概率质量函数，可测性在可数离散空间上自动成立。Ionescu--Tulcea 定理于是给出乘积可测空间 $S^{\N_0}$ 上的唯一概率测度，使坐标过程 $(X_i)$ 的柱集概率为
+\begin{equation}\label{eq:chain-cylinders}
+ \mathbb P(X_0=n_0,\ldots,X_r=n_r)
+ =\mathbf1_{\{n_0=1\}}\prod_{i=0}^{r-1}U(n_i,n_{i+1}).
+\end{equation}
+这些有限维分布的相容性正是行和为 $1$：对最后一个坐标求和就恢复前一阶分布。该定理把全部相容分布放到\emph{同一个}无限乘积空间上，坐标投影均可测。特别地，对任意 $k,m,n$ 有
+\begin{equation}\label{eq:chain-pair-law}
+ \mathbb P(X_k=m,X_{k+1}=n)=\mathbb P(X_k=m)U(m,n).
+\end{equation}
+
+还需将几乎处处成立的支撑条件整理成逐路径成立的条件。令
+\[
+ G=\{X_0=1\}\cap\bigcap_{k\ge0}\{U(X_k,X_{k+1})>0\}.
+\]
+对固定 $k$，零转移事件是满足 $U(m,n)=0$ 的可数多个二坐标柱集的并；每个柱集由~\eqref{eq:chain-pair-law}~知概率为零。因此 $G$ 可测且概率为 $1$。把概率空间限制到 $G$ 不改变任何概率，也不需重新归一化。在这个空间上，\emph{每条}路径都满足
+\[
+ X_0=1,\qquad X_k<X_{k+1},\qquad X_k\mid X_{k+1}\quad(k\ge0).
+\]
+特别地，$X_{k+1}\ge2X_k$，从而 $X_k\ge2^k$，得到无限的严格递增整除链。这一辅助增长估计也保证任何有限截断内的访问次数有限。
+
+Prim 将核写在全部自然数上，原始 $U$ 的第 $0$ 行为零，并不归一化。构造概率核时，它人为把该行补为 $\delta_1$；从初始状态 $1$ 出发的支撑归纳保证永远不访问 $0$，故补行不影响上述正整数过程。随后源码使用路径测度及一个满测度子类型，使严格递增和整除性质对该子类型的每个样本成立。
+其导出的 Markov 接口是~\eqref{eq:chain-pair-law}~这一相邻二坐标恒等式；完整的无限路径分布来自实际的路径测度构造，不能仅凭该接口名称推断全部条件概率性质。
+
+至此完成的是无限随机环境链的构造。要从中选出对给定集合 $A$ 达到密度下界的确定性样本，仍须后续的访问恒等式、矩估计和极限论证。
+
+\subsection{访问概率与加权和：待展开}
+下一步需要证明
+\begin{equation}\label{eq:visit-goal}
+ \sum_{i\ge0}\mathbb P(X_i=n)=\nu_\Lambda(n),
+ \qquad
+ \sum_{\substack{n\in A\\n\le x}}\nu_\Lambda(n)=W_A^{\le}(x)+O(1).
+\end{equation}
+这里权重比较的误差为何一致有界尚待展开，不能仅由本节已证的 $\nu_\Lambda(n)\le1/n$ 推出。
+
+\subsection{一阶矩和二阶矩：待展开}
+记 $Z_A(x)=\#\{i\ge0:X_i\in A,\ X_i\le x\}$。后续需要论证
+\begin{equation}\label{eq:moment-goals}
+ \mathbb E Z_A(x)=\sum_{\substack{n\in A\\n\le x}}\nu_\Lambda(n),
+ \qquad \mathbb E[Z_A(x)^2]\ll(\log\log x)^2.
+\end{equation}
+本轮不展开质因子个数函数与二阶矩的关系。
+
+\subsection{反向 Fatou 与确定性路径：待展开}
+沿使加权密度趋于 $\Delta(A)$ 的尺度序列归一化后，还需利用矩控制与反向 Fatou 论证，选出\emph{同一条}确定性环境链 $m_0\mid m_1\mid\cdots$，满足
 \begin{equation}\label{eq:ambient-hits}
  \limsu\frac{\#\{i\ge0:m_i\in A,\ m_i\le x\}}{\log\log x}
  \ge\Delta(A).
 \end{equation}
-此时不要求所有 $m_i$ 属于 $A$。这一步对应 Prim 的环境链定理，不能仅由密度定义直接得到。
-
-为明确下一阶段需要展开什么，记随机环境链的访问次数为
-\[
- Z_A(x)=\#\{i\ge0:m_i\in A,\ m_i\le x\}.
-\]
-参考论文的论证需要依次建立：von Mangoldt 不变权重 $\nu_\Lambda$ 及其伴随向上转移核；从 $1$ 出发的无限随机整除链；访问概率恒等式
-\begin{equation}\label{eq:visit-goal}
- \sum_{i\ge0}\mathbb P(m_i=n)=\nu_\Lambda(n);
-\end{equation}
-以及权重比较和二阶矩估计
-\begin{equation}\label{eq:moment-goals}
- \sum_{\substack{n\in A\\n\le x}}\nu_\Lambda(n)=W_A^{\le}(x)+O(1),
- \qquad \mathbb E Z_A(x)^2\ll(\log\log x)^2.
-\end{equation}
-沿使加权密度趋于 $\Delta(A)$ 的尺度序列归一化后，再用截断形式的反向 Fatou 论证，才能选出满足~\eqref{eq:ambient-hits}~的同一条确定性路径。仅在每个尺度分别选出一条长的有限链，并不能保证这些链相容。
-
-本阶段已定位这些结论的源码入口，见第~\ref{sec:formal}~节及随稿检索清单。本小节记录其准确作用，尚未将随机核构造、二阶矩估计及反向 Fatou 的详细证明展开为正文。
+本节构造的无限路径空间是这一步的前提；仅在每个尺度分别选出一条有限链，仍不能保证这些链相容。
 
 \subsection{从访问指标抽取子链}
 \begin{lemma}[集合内子链提取]\label{lem:extract}
@@ -52,4 +193,4 @@
 因而所需的上极限下界原样保留。
 \end{proof}
 
-这样，已有整除链定理的证明职责被分解为：先证明概率方法给出的~\eqref{eq:ambient-hits}，再应用引理~\ref{lem:extract}。本稿当前对前者作有明确来源的引用，对后者给出完整推导；尚不把这一阶段描述为对上游全部证明的逐项复现。
+这样，已有整除链定理的证明职责被分解为：先证明概率方法给出的~\eqref{eq:ambient-hits}，再应用引理~\ref{lem:extract}。本轮已展开随机环境链本身的构造；从随机链得到上述密度下界的步骤仍作有明确来源的引用，子链提取则保留完整推导。尚不把这一阶段描述为对上游全部证明的逐项复现。
