@@ -396,6 +396,7 @@ $(\Omega(1)+1)\nu_\Lambda(1)=1$。令
 几何级数的公比 $1/p<1$，所以延伸指数求和合法；其余换序都是有限换序。源码把指数先截在 $1\le r\le N$，再用几何级数上界，数学作用相同。
 
 \paragraph{两个双对数因子的来源。}
+式~\eqref{eq:omega-erdos-product}~说明，下述数论估计只承担一个明确任务：分别控制 $H(N)$ 与 $P(N)$，使带 $\Omega$ 的终端和为 $O((\log\log N)^2)$，从而接回二阶矩界。Chebyshev 估计用于证明这里需要的 Mertens 输入；不需要素数定理，也不引入访问事件的独立性假设。
 首先，递减函数 $1/(t\log t)$ 的积分比较给出某个绝对常数 $B\ge0$，使
 \begin{equation}\label{eq:erdos-terminal-loglog}
  H(N)\le B+\log\log N\qquad(N\ge2).

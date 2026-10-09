@@ -1,13 +1,21 @@
-% 第一阶段修订：按数学论证分章；本轮不编译。
+% Stage 8：内容一致性、中文环境与证明网络排版修订。
 % 参考 arXiv:2605.00301v1 的单栏、紧凑摘要、居中节标题与左侧公式编号。
 \documentclass[UTF8,11pt,a4paper,scheme=plain,leqno]{ctexart}
 \usepackage[margin=2.7cm]{geometry}
 \usepackage{amsmath,amssymb,amsthm,mathtools,enumitem,booktabs,longtable,array}
 \usepackage{tikz}
+\usepackage{float}
 \usetikzlibrary{arrows.meta}
 \usepackage{xurl}
 \usepackage[hidelinks]{hyperref}
-\urlstyle{tt}
+\urlstyle{same}
+\renewcommand{\proofname}{证明}
+\renewcommand{\abstractname}{摘要}
+\renewcommand{\refname}{参考文献}
+\renewcommand{\figurename}{图}
+\raggedbottom
+\setlength{\LTpre}{.6\baselineskip}
+\setlength{\LTpost}{.6\baselineskip}
 \ctexset{section={format=\centering\large\bfseries,beforeskip=1.8ex plus .4ex,afterskip=1.2ex},
   subsection={format=\normalsize\bfseries,beforeskip=1.4ex,afterskip=.6ex}}
 \setlength{\parindent}{2em}
@@ -29,7 +37,7 @@
 \begin{document}
 \maketitle
 \begin{abstract}
-本文整理正下对数密度整数序列中无限整除链的证明结构。首先证明一般非负数列的有限 Abel 下界，再通过离散双对数主项估计建立密度转移。随后将已有整除链定理分解为环境链构造与集合内子链提取，并说明端点、枚举和极限值域的转换。最后统一列出固定版本 Lean 源码中的声明对应与显式引用关系。本阶段完整展开密度转换与子链提取；随机链构造和矩估计的详细阐释留待后续补充。
+本文阐释 JSP-001022 的数学证明及其 Lean 形式化对应关系。首先利用有限 Abel 求和与离散双对数主项估计，建立正下对数密度到正双对数加权密度的转换。随后分析 von Mangoldt 不变权重与伴随向上整除链，通过访问恒等式、一阶与二阶矩估计以及截断反向 Fatou，证明存在具有定量访问下界的确定性无限整除链。进一步通过集合内子链提取、严格截断和正整数枚举转换，得到原问题的最终陈述。最后整理原数学证明、Prim 形式化结果与补充 Lean 定理之间的依赖关系，并区分正文数学推导、源码显式引用与已导出的形式化定理类型。
 \end{abstract}
 \input{sections/01-introduction}
 \input{sections/02-density}
@@ -37,4 +45,7 @@
 \input{sections/04-conversions}
 \input{sections/05-formalization}
 \input{sections/references}
+\clearpage
+\input{figures/stage7-math-network}
+\input{figures/stage7-source-network}
 \end{document}
